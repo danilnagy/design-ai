@@ -7,7 +7,7 @@ title: 0. Introduction
 
 In this course we will study applications of artificial intelligence (AI) for design.
 
-1. [Recursion](docs/recursion)
+1. [Recursion](docs/recursion#jekyll-themes)
 2. Emergence
 3. Evolution
 4. Learning
