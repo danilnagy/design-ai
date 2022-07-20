@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 00. Intro
+title: 0. Introduction
 ---
 
 ## Welcome to GitHub Pages
