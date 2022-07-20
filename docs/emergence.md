@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 1. Recursion
+title: 2. Emergence
 ---
 
 ## Recursion
