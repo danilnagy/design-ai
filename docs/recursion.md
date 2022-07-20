@@ -1,4 +1,9 @@
-## Introduction
+---
+layout: default
+title: 1. Recursion
+---
+
+## Recursion
 
 You can use the [editor on GitHub](https://github.com/danilnagy/design-ai/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
