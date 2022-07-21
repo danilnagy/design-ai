@@ -14,13 +14,13 @@ This course is broken down into 3 major topics with a page of introductory mater
 
 1. [Recursion](docs/recursion)
 - [Growing structures](docs/recursion/growing-structures)
-- Subdividing spaces
+- [Dividing spaces](docs/recursion/dividing-spaces)
 2. [Emergence](docs/emergence)
-- Agent-based behavior
-- Form-finding with meshes
-3. [Evolution](docs/emergence)
-- SOO with Galapagos
-- MOO with Discover
+- [Working with agents](docs/emergence/working-with-agents)
+- [Form-finding with meshes](docs/emergence/form-finding-with-meshes)
+3. [Evolution](docs/evolution)
+- [SOO with Galapagos](docs/evolution/soo)
+- [MOO with Discover](docs/evolution/moo)
 
 ![](../../assets/images/small-image.jpg)
 
