@@ -6,4 +6,6 @@ nav_order: 6
 
 # Gallery
 
-[Danil Nagy](../../gallery/dn2216)
+- [Template](../../gallery/template)
+Start here
+{: .label }
