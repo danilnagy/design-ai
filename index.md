@@ -4,9 +4,9 @@ title: Introduction
 nav_order: 1
 ---
 
-# Welcome to the course!
+# Welcome 👋!
 
-In this course we will study applications of artificial intelligence (AI) for design.
+In this set of articles and guided workshops we will study applications of artificial intelligence (AI) for design.
 
 ## Course structure
 
