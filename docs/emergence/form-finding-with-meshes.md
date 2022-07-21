@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Form-finding with meshes
-parent: Recursion
+parent: Emergence
 nav_order: 2
 ---
 

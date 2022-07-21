@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Working with agents
-parent: Recursion
+parent: Emergence
 nav_order: 1
 ---
 
