@@ -5,6 +5,6 @@ parent: Recursion
 nav_order: 1
 ---
 
-## Growth
+# Growing structures
 
 Workshop
