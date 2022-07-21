@@ -37,8 +37,8 @@ heading_anchors: true
 
 # Aux links for the upper right navigation
 aux_links:
-  "design-ai on GitHub":
-    - "//github.com/danilnagy/design-ai"
+  "Fork me on GitHub":
+    - "//github.com/danilnagy/design-ai/fork"
 
 # Makes Aux links open in a new tab. Default is false
 aux_links_new_tab: false
