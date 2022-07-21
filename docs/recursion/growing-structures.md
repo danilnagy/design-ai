@@ -10,3 +10,5 @@ nav_order: 1
 ## Files
 
 - [Start files](test.txt)
+- [End files](test.txt)
+- [Challenge files](test.txt)
