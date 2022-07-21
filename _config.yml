@@ -1,8 +1,8 @@
 theme: jekyll-theme-cayman
 remote_theme: just-the-docs/just-the-docs
-title: Design Intelligence
+title: Design AI
 description: A web course focused on applications of artificial intelligence for design.
-permalink: "/"
+permalink: pretty
 color_scheme: dark
 
 # Enable or disable the site search
