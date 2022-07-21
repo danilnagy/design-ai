@@ -6,4 +6,4 @@ nav_order: 6
 
 # Gallery
 
-[Danil Nagy](gallery/dn2216)
+[Danil Nagy](../gallery/dn2216)
