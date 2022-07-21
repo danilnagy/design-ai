@@ -4,6 +4,6 @@ title: Emergence
 nav_order: 4
 ---
 
-## Emergence
+# Emergence
 
 Theory

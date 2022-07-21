@@ -5,6 +5,6 @@ has_children: true
 nav_order: 3
 ---
 
-## Recursion
+# Recursion
 
 Theory
