@@ -7,4 +7,4 @@ nav_order: 1
 
 # Single-objective optimization with Galapagos
 
-Workshop
+## Setting up and testing Galapagos
