@@ -6,4 +6,8 @@ nav_order: 2
 
 # Setting up your environment
 
-Workshop
+## Rhino / Grasshopper
+
+## Python / RhinoCommon
+
+## Github
