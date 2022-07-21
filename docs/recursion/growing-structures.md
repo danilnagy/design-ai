@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Workshop - Growing structures
+title: Growing structures
 parent: Recursion
 nav_order: 1
 ---
