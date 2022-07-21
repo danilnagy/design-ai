@@ -1,6 +1,7 @@
 ---
 layout: default
-title: 0. Introduction
+title: Introduction
+nav_order: 1
 ---
 
 ## Welcome to the course!
