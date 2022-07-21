@@ -8,9 +8,9 @@ nav_order: 6
 
 ## How to contribute
 
-https://design-ai.net/gallery/`my-id` - merged (production)
-
-https://`my-github-handle`.github.io/design-ai/gallery/`my-id` - personal (develop)
+URL's:
+- https://design-ai.net/gallery/`my-id` - merged (production)
+- https://`my-github-handle`.github.io/design-ai/gallery/`my-id` - personal (develop)
 
 ## Template
 
