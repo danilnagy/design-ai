@@ -18,7 +18,7 @@ giscus:
   repo-id:             "R_kgDOHsLHvg"
   category:            "Comments"
   category-id:         "DIC_kwDOHsLHvs4CQYI4"
-  mapping:             "pathname"
+  mapping:             "url"
   reaction-enabled:    "1"
   theme:               "light"
   crossorigin:         "anonymous"
