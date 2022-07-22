@@ -7,12 +7,7 @@ nav_order: 1
 
 # Growing structures
 
-## Files
-
-
-- [Start files](data/test.txt)
-- [End files](data/start.3dm)
-- [Challenge files](data/start.zip)
-
+| [start.rh](data/test.txt) | [start.gh](data/test.txt) |
+| [end.rh](data/test.3dm) | [end.gh](data/test.zip) |
 
 ![](images/small-image.jpg)
