@@ -65,9 +65,9 @@ layout: table_wrappers
         {% include nav.html pages=site.html_pages %}
       {% endif %}
     </nav>
-    <!-- <footer class="site-footer">
+    <footer class="site-footer">
       This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
-    </footer> -->
+    </footer>
   </div>
   <div class="main" id="top">
     <div id="main-header" class="main-header">
@@ -155,23 +155,24 @@ layout: table_wrappers
         {% endcapture %}
         {% if footer_custom != "" or site.last_edit_timestamp or site.gh_edit_link %}
           <hr>
+          {% assign provider = site.comments.provider | default:"disqus" %}
           {% if provider == "giscus" %}
-  {% assign giscus = site.giscus %}
-  {% if giscus.repo %}
-    <script src="https://giscus.app/client.js"
-            data-repo={{ giscus.repo }}
-            data-repo-id={{ giscus.repo-id }}
-            data-category={{ giscus.category }}
-            data-category-id={{ giscus.category-id }}
-            data-mapping={{ giscus.mapping }}
-            data-reactions-enabled={{ giscus.reaction-enabled }}
-            data-theme={{ giscus.theme }}
-            crossorigin={{ giscus.crossorigin }}
-            async>
-    </script>
-    <hr>
-  {% endif %}
-{% endif %} 
+            {% assign giscus = site.giscus %}
+            {% if giscus.repo %}
+                <script src="https://giscus.app/client.js"
+                        data-repo={{ giscus.repo }}
+                        data-repo-id={{ giscus.repo-id }}
+                        data-category={{ giscus.category }}
+                        data-category-id={{ giscus.category-id }}
+                        data-mapping={{ giscus.mapping }}
+                        data-reactions-enabled={{ giscus.reaction-enabled }}
+                        data-theme={{ giscus.theme }}
+                        crossorigin={{ giscus.crossorigin }}
+                        async>
+                </script>
+                <hr>
+            {% endif %}
+          {% endif %} 
 
           <footer>
             {% if site.back_to_top %}
