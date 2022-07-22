@@ -11,10 +11,10 @@ In this tutorial we will build a recursive algorithm from scratch that can creat
 
 Files you will need for this tutorial:
 
-| Start here                | Update these with finished results |
-| :------------------------ | :--------------------------------- |
-| [start.rh](data/test.txt) | [end.rh](data/test.txt)            |
-| [start.gh](data/test.3dm) | [end.gh](data/test.zip)            |
+| Start here                 | Update these with finished results |
+| :------------------------- | :--------------------------------- |
+| [start.rh](data/test.txt)  | [end.rh](data/test.txt)            |
+| [start.gh](data/start.3dm) | [end.gh](data/start.3dm)           |
 
 ## Introduction
 
