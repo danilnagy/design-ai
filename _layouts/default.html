@@ -155,6 +155,24 @@ layout: table_wrappers
         {% endcapture %}
         {% if footer_custom != "" or site.last_edit_timestamp or site.gh_edit_link %}
           <hr>
+          {% if provider == "giscus" %}
+  {% assign giscus = site.giscus %}
+  {% if giscus.repo %}
+    <script src="https://giscus.app/client.js"
+            data-repo={{ giscus.repo }}
+            data-repo-id={{ giscus.repo-id }}
+            data-category={{ giscus.category }}
+            data-category-id={{ giscus.category-id }}
+            data-mapping={{ giscus.mapping }}
+            data-reactions-enabled={{ giscus.reaction-enabled }}
+            data-theme={{ giscus.theme }}
+            crossorigin={{ giscus.crossorigin }}
+            async>
+    </script>
+    <hr>
+  {% endif %}
+{% endif %} 
+
           <footer>
             {% if site.back_to_top %}
               <p><a href="#top" id="back-to-top">{{ site.back_to_top_text }}</a></p>

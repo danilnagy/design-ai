@@ -5,6 +5,24 @@ description: A web course focused on applications of artificial intelligence for
 permalink: pretty
 color_scheme: dark
 
+# Set which comment system to use
+comments:
+  # 'disqus' / 'giscus' / 'utterances' are available
+  provider:            giscus
+
+  # You must install giscus github app before use.(https://github.com/apps/giscus)
+# Make sure all variables are set properly. Check below link for detail.
+# https://giscus.vercel.app/
+giscus:
+  repo:                "danilnagy/design-ai"
+  repo-id:             "R_kgDOHsLHvg"
+  category:            "Comments"
+  category-id:         "DIC_kwDOHsLHvs4CQYI4"
+  mapping:             "pathname"
+  reaction-enabled:    "1"
+  theme:               "light"
+  crossorigin:         "anonymous"
+
 # Enable or disable the site search
 # Supports true (default) or false
 search_enabled: true
