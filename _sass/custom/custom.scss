@@ -16,9 +16,11 @@ a:not([class]):hover {
 .side-bar {
     background-color: #f5f8fa;
 }
-@media (min-width: 50rem)
-.side-bar {
-    border-right: 1px solid #d0d7de;
+
+@media only screen and (max-width: 50rem) {
+    .side-bar {
+        border-color: #d0d7de;
+    }
 }
 
 div.highlighter-rouge {
