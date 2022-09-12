@@ -110,7 +110,7 @@ callouts:
     title: Challenge
     color: blue
   notice:
-    title: ⚠️
+    title: Warning
     color: red
 
 compress_html:
