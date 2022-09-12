@@ -41,7 +41,7 @@ The `Python` component in the start file has already been set up with a set of f
 
 The `Python` component has also been set up with two outputs which we will populate with data within our script:
 
-<u>Inputs</u>
+<u>Outputs</u>
 
 - points - this will store a list of points representing the grid
 - circles - this will tore a list of circles generated at each point of the grid
@@ -51,9 +51,53 @@ The `Python` component has also been set up with two outputs which we will popul
 Let's develop the attractor point example to get an idea of how we will work with Python inside of Rhino Grasshopper. Double-click on the `Python` component to open the script. You will see that the `Rhino.Geometry` library has already been imported and the two output variables have been initialized as empty lists. Finally, there is a `print()` statement to display the test `hello world!` statement in the console.
 
 ```python
-x = 5
-def (ls):
-    print "aha!"
+import Rhino.Geometry as rh
+
+points = []
+circles = []
+
+print("hello world!")
+```
+
+## Creating the grid
+
+Let's add some code below the variable intialization to create a 2-dimensional grid of points based on the `x_num` and `y_num` parameters. You can delete or comment out the print statement if you wish.
+
+To create a grid, let's start with a set of loops to iterate over the x and y dimensions of the grid:
+
+```python
+for x in range(x_num):
+    for y in range(y_num):
+```
+
+These loops will give us access to a `x` and `y` variable that designates each coordinate within the grid. Inside the inner `for loop`, let's add code to create a new instance of the `Point3d` class from the `Rhino.Geometry` library at each location in the grid:
+
+```python
+        pt = rh.Point3d(x, y, 0.0)
+```
+
+Finally, let's add each point to the `points` list we initialized as an empty list at the top of the script:
+
+```python
+        pt = rh.Point3d(x, y, 0.0)
+```
+
+Click 'Test' to run the script. You should now see a 10x10 grid of points in the Rhino window:
+
+![](images/0_02.png)
+
+The complete code at this point should look like this:
+
+```python
+import Rhino.Geometry as rh
+
+points = []
+circles = []
+
+for x in range(x_num):
+    for y in range(y_num):
+        pt = rh.Point3d(x, y, 0.0)
+        points.append(pt)
 ```
 
 ## Challenge
