@@ -136,7 +136,7 @@ Now run the script and make sure that your results are similar to below. You sho
 
 ![](images/0_03.png)
 
-{: .note-title }
+{: .challenge-title }
 
 > Challenge 1
 >
