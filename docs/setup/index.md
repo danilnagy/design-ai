@@ -177,12 +177,17 @@ for x in range(x_num):
 
 # Working with Github
 
-To submit your work for the challenge at the end of each tutorial, you will use Github. If you've never use Github before, you can think of it as a kind of wiki for the files pertaining to one project.
+To submit your work for the challenge at the end of each tutorial, you will use Github. If you've never use Github before, you can think of it as a kind of wiki for managing all the files of a project.
 
-Github is by far the predominant way for developer to collaborate on code-based project. In a way this is similar to how you might use a cloud storate service like Dropbox or Google Drive to share files with a team. However, Github provides a much more explicit workflow for working with and updating files which creates a legible record of all changes and prevents files being modified by mistake.
+Github is by far the most popular way for developers to collaborate on code-based projects. In a way this is similar to how you might use a cloud storage service like Dropbox or Google Drive to share files with a team. However, Github provides a much more explicit workflow for working with and updating files which creates a legible record of all changes and prevents files being modified by mistake.
+
+### Getting started
 
 If you don't already have a Github account, start by creating one here: https://github.com/signup
 
-Once you have an account, use the [Fork me on Github](https://github.com/danilnagy/design-ai/fork) link in the top right corner of this page to create your own fork of the class repository. This will allow you to modify the files in the repository (including the document you are reading right now) and submit the changes back to the main repo using a pull request (PR for short). If you are not familiar with Github or typical git workflows such as branching, forking, and creating pull requests I highly recommend going through the [Getting started tutorials](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop) for Github Desktop.
+Once you have an account, use the [Fork me on Github](https://github.com/danilnagy/design-ai/fork) link in the top right corner of this page to create your own fork of the class repository. This will allow you to modify the files in the repository (including the document you are reading right now) and submit the changes back to the main repo using a pull request (PR for short).
+
+{: .notice }
+If you are not familiar with Github or typical git workflows such as branching, forking, and creating pull requests I highly recommend going through the [Getting started tutorials](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop) for Github Desktop.
 
 Once you've forked the repository, clone your fork to your computer using Github Desktop. This will create a copy of the repository's file on your computer so you can work with them.
