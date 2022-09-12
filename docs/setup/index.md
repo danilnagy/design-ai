@@ -140,7 +140,7 @@ Now run the script and make sure that your results are similar to below. You sho
 
 > Challenge 1
 >
-> Use one or more conditional statements to assign discrete radius values to the circles based on their distances to the attractor point. For example, circles within a certain distance away having a radius of `0.5` and those further than a certain distance having a radius of 2.0.
+> Use one or more conditional statements to assign discrete radius values to the circles based on their distances to the attractor point. For example, circles within a certain distance away having a radius of `0.5` and those further than a certain distance having a radius of `2.0`.
 
 ![](images/0_04.png)
 
@@ -148,7 +148,34 @@ Now run the script and make sure that your results are similar to below. You sho
 
 > Challenge 2
 >
-> Add functionality for the `spacing` parameter. This should control the distance between each point in the grid.
+> You may remember that we have an additional parameter called 'spacing' being passed into our Python script. For this challenge, add code to the script to make this parameter control the distance between each point in the grid.
+
+![](images/0_05.gif)
+
+```python
+
+## Once you are done, paste your final script code here and create a pull request called:
+## 0-your_uni (for example `0-dn2216`)
+
+import Rhino.Geometry as rh
+
+points = []
+circles = []
+
+for x in range(x_num):
+    for y in range(y_num):
+        ## HINT: use the `spacing` parameter to control the location of each grid point
+        point = rh.Point3d(x, y, 0.0)
+        points.append(point)
+
+        dist = point.DistanceTo(attractor)
+
+        ## HINT: change this to assign a discrete instead of a continuous value for the radius
+        radius = dist / 5.0
+        circle = rh.Circle(point, radius)
+        circles.append(circle)
+
+```
 
 # Working with Github
 
