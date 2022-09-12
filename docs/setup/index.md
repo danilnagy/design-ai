@@ -140,7 +140,9 @@ Now run the script and make sure that your results are similar to below. You sho
 
 > Challenge 1
 >
-> Create discrete radii.
+> Use one or more conditional statements to assign discrete radius values to the circles based on their distances to the attractor point. For example, circles within a certain distance away having a radius of `0.5` and those further than a certain distance having a radius of 2.0.
+
+![](images/0_04.png)
 
 {: .challenge-title }
 
