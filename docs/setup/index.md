@@ -109,10 +109,8 @@ Next, let's draw a circle at each point in the grid. For this we'll use the `Cir
         circles.append(circle)
 ```
 
-```markdown
 {: .note }
 If you get lost along the way, you can download the complete solution using the link at the top of the page.
-```
 
 ### Connecting the attractor point
 
@@ -138,10 +136,11 @@ Now run the script and make sure that your results are similar to below. You sho
 
 ![](images/0_03.png)
 
-```markdown
-{: .note }
-If you get lost along the way, you can download the complete solution using the link at the top of the page.
-```
+{: .challenge }
+
+> Challenge 1
+>
+> Create discrete radii.
 
 ## Challenge
 
