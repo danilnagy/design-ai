@@ -37,7 +37,7 @@ The `Python` component in the start file has already been set up with a set of f
 - x_num (`int`, "Item Access") - this number specifies the grid's x-dimension
 - y_num (`int`, "Item Access") - this number specifies the grid's y-dimension
 - spacing (`float`, "Item Access") - this number specifies the grid's spacing
-- attractor (`Point3d`, "Item Access") - this point specifies the location of the attractor point
+- attractor (`Point3d`, "Item Access") - this point specifies the location of the attractor point. It is set up to automatically reference the point from the Rhino file using a `Pipeline` component.
 
 The `Python` component has also been set up with two outputs which we will populate with data within our script:
 
@@ -109,9 +109,14 @@ Next, let's draw a circle at each point in the grid. For this we'll use the `Cir
         circles.append(circle)
 ```
 
+```markdown
 {: .note }
-
 If you get lost along the way, you can download the complete solution using the link at the top of the page.
+```
+
+### Connecting the attractor point
+
+Finally, let's add some code to make the attractor point control the radius of the circles.
 
 ## Challenge
 
