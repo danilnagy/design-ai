@@ -8,19 +8,31 @@ nav_exclude: true
 
 [My site](https://your-github-id.github.io/design-ai/)
 
-## Recursion
+## 0 - Setting up the environment
 
 ![](images/small-image.jpg)
 
 ![](images/small-image.jpg)
 
-## Emergence
+## 1 - Working with data
 
 ![](images/small-image.jpg)
 
 ![](images/small-image.jpg)
 
-## Evolution
+## 2 - Recursion
+
+![](images/small-image.jpg)
+
+![](images/small-image.jpg)
+
+## 3 - Emergence
+
+![](images/small-image.jpg)
+
+![](images/small-image.jpg)
+
+## 4 - Evolution
 
 ![](images/small-image.jpg)
 
