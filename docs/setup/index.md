@@ -79,7 +79,7 @@ These loops will give us access to a `x` and `y` variable that designates each c
 Finally, let's add each point to the `points` list we initialized as an empty list at the top of the script:
 
 ```python
-        pt = rh.Point3d(x, y, 0.0)
+        points.append(pt)
 ```
 
 Click 'Test' to run the script. You should now see a 10x10 grid of points in the Rhino window:
@@ -102,6 +102,16 @@ for x in range(x_num):
 
 ## Challenge
 
-# Workin with Github
+Add functionality for the `spacing` parameter. This should control the distance between each point in the grid.
 
-In this class you will use Github to both access class files as well as submit your work for evaluation. Kind of like working on a wiki - explicit file change tracking.
+# Working with Github
+
+To submit your work for the challenge at the end of each tutorial, you will use Github. If you've never use Github before, you can think of it as a kind of wiki for the files pertaining to one project.
+
+Github is by far the predominant way for developer to collaborate on code-based project. In a way this is similar to how you might use a cloud storate service like Dropbox or Google Drive to share files with a team. However, Github provides a much more explicit workflow for working with and updating files which creates a legible record of all changes and prevents files being modified by mistake.
+
+If you don't already have a Github account, start by creating one here: https://github.com/signup
+
+Once you have an account, use the [Fork me on Github](https://github.com/danilnagy/design-ai/fork) link in the top right corner of this page to create your own fork of the class repository. This will allow you to modify the files in the repository (including the document you are reading right now) and submit the changes back to the main repo using a pull request (PR for short). If you are not familiar with Github or typical git workflows such as branching, forking, and creating pull requests I highly recommend going through the [Getting started tutorials](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/overview/getting-started-with-github-desktop) for Github Desktop.
+
+Once you've forked the repository, clone your fork to your computer using Github Desktop. This will create a copy of the repository's file on your computer so you can work with them.
