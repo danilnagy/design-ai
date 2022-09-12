@@ -109,8 +109,8 @@ callouts:
   challenge:
     title: Challenge
     color: blue
-  warning:
-    title: Warning
+  notice:
+    title: Notice
     color: red
 
 compress_html:
