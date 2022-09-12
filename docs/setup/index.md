@@ -24,7 +24,7 @@ In this class you will use a set of programs and technologies to write our scrip
 - **Python**: high-level programming language that supports Functional and Object-Oriented programming
 - **Github**: version-control software for publishing and contributing to open source projects. Although you can use any git client or use git directly from the command line, I recommend using [Github Desktop](https://desktop.github.com/) which has version for both [Windows](https://central.github.com/deployments/desktop/desktop/latest/win32) and [MacOS](https://central.github.com/deployments/desktop/desktop/latest/darwin).
 
-## Open the files
+### Open the files
 
 To start the tutorial, download the starting Rhino and Grasshopper files using the links above and open them. Make sure you see the "hello world!" message in the yellow `Panel`. This means that your Grasshopper and Python are working and you have everything you need for this tutorial.
 
@@ -59,7 +59,7 @@ circles = []
 print("hello world!")
 ```
 
-## Creating the grid
+### Creating the grid
 
 Let's add some code below the variable intialization to create a 2-dimensional grid of points based on the `x_num` and `y_num` parameters. You can delete or comment out the print statement if you wish.
 
@@ -73,13 +73,13 @@ for x in range(x_num):
 These loops will give us access to a `x` and `y` variable that designates each coordinate within the grid. Inside the inner `for loop`, let's add code to create a new instance of the `Point3d` class from the `Rhino.Geometry` library at each location in the grid:
 
 ```python
-        pt = rh.Point3d(x, y, 0.0)
+        point = rh.Point3d(x, y, 0.0)
 ```
 
 Finally, let's add each point to the `points` list we initialized as an empty list at the top of the script:
 
 ```python
-        points.append(pt)
+        points.append(point)
 ```
 
 Click 'Test' to run the script. You should now see a 10x10 grid of points in the Rhino window:
@@ -96,9 +96,22 @@ circles = []
 
 for x in range(x_num):
     for y in range(y_num):
-        pt = rh.Point3d(x, y, 0.0)
-        points.append(pt)
+        point = rh.Point3d(x, y, 0.0)
+        points.append(point)
 ```
+
+### Drawing circles
+
+Next, let's draw a circle at each point in the grid. For this we'll use the `Circle` Class in `Rhino.Geometry` to create an instance of a `Circle` centered at the `point` with a default radius of `0.5`. We will also add each instance to the `circles` list so we can see the circles in the Rhino viewport. Add the following lines within the inner `for` loop:
+
+```python
+        circle = rh.Circle(point, 0.5)
+        circles.append(circle)
+```
+
+{: .note }
+
+If you get lost along the way, you can download the complete solution using the link at the top of the page.
 
 ## Challenge
 
