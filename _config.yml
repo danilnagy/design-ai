@@ -100,12 +100,15 @@ plugins:
 kramdown:
   syntax_highlighter_opts:
     block:
-      line_numbers: true
+      line_numbers: false
 
 callouts:
   note:
     title: Note
     color: green
+  challenge:
+    title: Challenge
+    color: blue
   warning:
     title: Warning
     color: red
