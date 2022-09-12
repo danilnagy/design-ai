@@ -100,7 +100,15 @@ plugins:
 kramdown:
   syntax_highlighter_opts:
     block:
-      line_numbers: false
+      line_numbers: true
+
+callouts:
+  note:
+    title: Note
+    color: green
+  warning:
+    title: Warning
+    color: red
 
 compress_html:
   clippings: all
