@@ -116,7 +116,32 @@ If you get lost along the way, you can download the complete solution using the 
 
 ### Connecting the attractor point
 
-Finally, let's add some code to make the attractor point control the radius of the circles.
+Finally, let's add some code to make the attractor point control the radius of the circles. Still working within the inner `for` loop, we will first calculate the distance from each grid point to the attractor point. Then, we will use this distance to set a custom radius for each circle. Add two lines of code and modify the `Circle` constructor so that your code looks like this:
+
+```python
+import Rhino.Geometry as rh
+
+points = []
+circles = []
+
+for x in range(x_num):
+    for y in range(y_num):
+        pt = rh.Point3d(x, y, 0.0)
+        points.append(pt)
+
+        dist = point.DistanceTo(attractor)
+        radius = dist / 5.0
+        circle = rh.Circle(point, radius)
+```
+
+Now run the script and make sure that your results are similar to below. You should see circles of various sizes, with smaller circles closer to the attractor point, and larger circles further away. You can experiment with different calculations on the line setting the `radius` variable to create different circle patterns.
+
+![](images/0_03.png)
+
+```markdown
+{: .note }
+If you get lost along the way, you can download the complete solution using the link at the top of the page.
+```
 
 ## Challenge
 
