@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Setting up
+title: 0. Setting up
 nav_order: 2
 ---
 
