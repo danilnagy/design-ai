@@ -153,7 +153,6 @@ Now run the script and make sure that your results are similar to below. You sho
 ![](images/0_05.gif)
 
 ```python
-
 ## Once you are done, paste your final script code here and create a pull request called:
 ## 0-your_uni (for example `0-dn2216`)
 
@@ -174,7 +173,6 @@ for x in range(x_num):
         radius = dist / 5.0
         circle = rh.Circle(point, radius)
         circles.append(circle)
-
 ```
 
 # Working with Github
