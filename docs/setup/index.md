@@ -132,11 +132,11 @@ for x in range(x_num):
         circle = rh.Circle(point, radius)
 ```
 
-Now run the script and make sure that your results are similar to below. You should see circles of various sizes, with smaller circles closer to the attractor point, and larger circles further away. You can experiment with different calculations on the line setting the `radius` variable to create different circle patterns.
+Now run the script and make sure that your results are similar to below. You should see circles of various sizes, with smaller circles closer to the attractor point, and larger circles further away. You can experiment with different calculations on `line 12` to create different circle patterns.
 
 ![](images/0_03.png)
 
-{: .challenge }
+{: .note-title }
 
 > Challenge 1
 >
