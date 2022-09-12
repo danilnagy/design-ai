@@ -30,7 +30,25 @@ To start the tutorial, download the starting Rhino and Grasshopper files using t
 
 ![](images/0_01.png)
 
+The `Python` component in the start file has already been set up with a set of four inputs which will be accessibile within the Python script:
+
+<u>Inputs</u>
+
+- x_num (`int`, "Item Access") - this number specifies the grid's x-dimension
+- y_num (`int`, "Item Access") - this number specifies the grid's y-dimension
+- spacing (`float`, "Item Access") - this number specifies the grid's spacing
+- attractor (`Point3d`, "Item Access") - this point specifies the location of the attractor point
+
+The `Python` component has also been set up with two outputs which we will populate with data within our script:
+
+<u>Inputs</u>
+
+- points - this will store a list of points representing the grid
+- circles - this will tore a list of circles generated at each point of the grid
+
 ## Attractor point example
+
+Let's develop the attractor point example to get an idea of how we will work with Python inside of Rhino Grasshopper. Double-click on the `Python` component to open the script. You will see that the `Rhino.Geometry` library has already been imported and the two output variables have been initialized as empty lists. Finally, there is a `print()` statement to display the test `hello world!` statement in the console.
 
 ```python
 x = 5
