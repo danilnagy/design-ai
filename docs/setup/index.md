@@ -31,6 +31,8 @@ Files you will need for this tutorial:
 
 Open the files and locate the `code component`.
 
+![](images/0_01.png)
+
 ### Implementing the recursive call
 
 ```python
