@@ -142,9 +142,11 @@ Now run the script and make sure that your results are similar to below. You sho
 >
 > Create discrete radii.
 
-## Challenge
+{: .challenge-title }
 
-Add functionality for the `spacing` parameter. This should control the distance between each point in the grid.
+> Challenge 2
+>
+> Add functionality for the `spacing` parameter. This should control the distance between each point in the grid.
 
 # Working with Github
 
