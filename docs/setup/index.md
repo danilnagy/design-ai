@@ -166,11 +166,14 @@ for x in range(x_num):
         point = rh.Point3d(x*spacing, y*spacing, 0.0)
         points.append(point)
 
-        dist = point.DistanceTo(attractor)
-
-        radius = 5.0
-        circle = rh.Circle(point, radius)
-        circles.append(circle)
+dist = point.DistanceTo(attractor)
+if dist >= 3
+    circle = rh.Circle(point, 0.5)
+    circles.append(circle)
+    
+else dist < 3
+    circle = rh.Circle(point, 0.2)
+    circles.append(circle)
 ```
 
 # Working with Github
