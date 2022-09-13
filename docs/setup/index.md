@@ -167,13 +167,14 @@ for x in range(x_num):
         points.append(point)
 
 dist = point.DistanceTo(attractor)
-if dist >= 3
+if dist > 3:
     circle = rh.Circle(point, 0.5)
     circles.append(circle)
     
-else dist < 3
+else:
     circle = rh.Circle(point, 0.2)
     circles.append(circle)
+
 ```
 
 # Working with Github
