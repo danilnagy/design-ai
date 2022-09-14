@@ -165,9 +165,7 @@ print(attractor)
 for x in range(x_num): 
     for y in range(y_num):
         
-        x_space = x*spacing ##important
-        
-        point = rh.Point3d(x, y, 0.0)
+        point = rh.Point3d(x*spacing , y*spacing , 0.0)
         points.append(point)
         dist = point.DistanceTo(attractor)
         radius = 1.0
@@ -180,8 +178,6 @@ for x in range(x_num):
         
         circle = rh.Circle(point, radius)
         circles.append(circle)
-        
-##hahahahaha
 ```
 
 # Working with Github
