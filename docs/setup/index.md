@@ -154,7 +154,7 @@ Now run the script and make sure that your results are similar to below. You sho
 
 ```python
 ## Once you are done, paste your final script code here and create a pull request called:
-## 0-your_uni (for example `0-dn2216`)
+## 0-eja2155 (for example `0-dn2216`)
 
 import Rhino.Geometry as rh
 
@@ -163,17 +163,20 @@ circles = []
 
 for x in range(x_num):
     for y in range(y_num):
-        ## HINT: use the `spacing` parameter to control the location of each grid point
-        point = rh.Point3d(x, y, 0.0)
+        x_spaced = x * spacing
+        y_spaced = y * spacing
+        point = rh.Point3d(x_spaced, y_spaced, 0.0)
         points.append(point)
 
         dist = point.DistanceTo(attractor)
-
-        ## HINT: change this to assign a discrete instead of a continuous value for the radius
-        radius = dist / 5.0
+        if dist > 3:
+            radius = dist / 10.0
+        else:
+            radius = dist / 7.0
         circle = rh.Circle(point, radius)
         circles.append(circle)
-```
+        
+print("hello world!")
 
 # Working with Github
 
