@@ -161,18 +161,33 @@ import Rhino.Geometry as rh
 points = []
 circles = []
 
-for x in range(x_num):
-    for y in range(y_num):
-        ## HINT: use the `spacing` parameter to control the location of each grid point
-        point = rh.Point3d(x, y, 0.0)
+
+for n in range(x_num):
+    for m in range(y_num):
+        point = rh.Point3d(n*spacing,m*spacing,0.0)
         points.append(point)
+#       add points into array
 
         dist = point.DistanceTo(attractor)
-
-        ## HINT: change this to assign a discrete instead of a continuous value for the radius
+#       attractor is the 1 point geo in canvas as center of transformation 
         radius = dist / 5.0
-        circle = rh.Circle(point, radius)
+#        if dist< 2:
+#            circle = rh.Circle(point,0.2)
+#        if dist< 5 and dist> 2:
+#            circle = rh.Circle(point,0.5)
+#        if dist> 5:
+#            circle = rh.Circle(point,1.0)
+#            
+#       spacing control
+        if dist< spacing:
+            circle = rh.Circle(point,0.2)
+        if dist< spacing*3 and dist> spacing:
+            circle = rh.Circle(point,0.5)
+        if dist> spacing*3:
+            circle = rh.Circle(point,1.0)
+#        circle = rh.Circle(point,radius)
         circles.append(circle)
+print("hello world!")
 ```
 
 # Working with Github
