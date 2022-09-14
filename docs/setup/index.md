@@ -153,7 +153,7 @@ Now run the script and make sure that your results are similar to below. You sho
 ![](images/0_05.gif)
 
 ```python
-## Once you are done, paste your final script code here and create a pull request called:
+
 ## 0-lr3102
 
 import Rhino.Geometry as rh
