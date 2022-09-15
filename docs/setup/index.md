@@ -56,7 +56,21 @@ import Rhino.Geometry as rh
 points = []
 circles = []
 
-print("hello world!")
+for x in range(x_num): #remember to set typehint to int
+    for y in range(y_num): #remember to set typehint to int
+        
+        point = rh.Point3d(x*spacing, y*spacing, 0.0) #create constructor
+        
+        points.append(point) #run method
+        
+        dist = point.DistanceTo(attractor)
+        
+        if dist <= 2:
+            circle = rh.Circle(point, 0.5)
+        if dist > 2:
+            circle = rh.Circle(point, 1.0)
+        
+        circles.append(circle)
 ```
 
 ### Setting up the grid
