@@ -182,6 +182,63 @@ for x in range(int(x_num)):
             circle = rh.Circle(point, radius)
             
             circles.append(circle)
+
+##1-gv2325
+
+import Rhino.Geometry as rh
+
+#print srf
+
+print rh.PlaneSurface.IsValid
+print srf.IsValid
+
+print srf.Domain(0)
+print type(srf.Domain(0))
+
+#create a domain for the surface units in its planes
+d_1 = srf.Domain(0)
+
+u_min = d_1.Min
+u_max = d_1.Max
+print u_min, u_max
+
+d_2 = srf.Domain(0)
+
+v_min = d_2.Min
+v_max = d_2.Max
+print v_min, v_max
+
+a = srf.PointAt(0,5)
+
+#empty list to store points from pts out
+pts = []
+
+#correcting for the points to be mapped on the entire surface
+u_inc = u_max/(u_num - 1)
+v_inc = v_max/(v_num - 1)
+
+print u_inc, v_inc
+
+for u in range(u_num):
+    
+    #created a nested list structure
+    pts.append([])
+    
+    for v in range (v_num):
+        
+        
+        
+        #first creating a point
+        pt = srf.PointAt(u * u_inc, v * v_inc)
+        
+        #get the last list in the nested list and place the points in the inner list
+        inner_list = pts[-1]
+        
+        #making a list for the points and place them in inner list
+        inner_list.append(pt)
+        
+
+print pts
 ```
 
 # Working with Github
