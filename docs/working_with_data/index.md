@@ -204,13 +204,43 @@ You should now see another set of panels overlapping the previous. If you have a
 
 ![](images/1_07.png)
 
-We are seeing overlapping panels because we are adding both the original `Polyline` as well as the new flattened one to the `polys` list. Because we are now generated multiple items for each panel, we can organize the data a little better using dictionaries.
+We are seeing overlapping panels because we are adding both the original `Polyline` as well as the new flattened one to the `polys` list. Because we are now generating multiple items for each panel, we can organize the data a little better using dictionaries. Modify the double loop in the script so that `polys` is a list of dictionaries, each of which has two keys to store the two generated `Polylines`:
 
-Store new boundary in dict data structure
+```python
+polys = []
 
-Extract both boundaries to gh
+for i, row in enumerate(pts[:-1]):
+    for j, pt_1 in enumerate(row[:-1]):
 
-Ensure planar srf works
+        polys.append({}) ## add an empty dictionary to the list
+
+        pt_2 = row[j+1]
+        next_row = pts[i+1]
+        pt_3 = next_row[j+1]
+        pt_4 = next_row[j]
+
+        poly = rh.PolylineCurve([pt_1, pt_2, pt_3, pt_4, pt_1])
+        polys[-1]["original"] = poly ## store original poly in the last dictionary with a key
+
+        pt_5 = rh.Point3d(pt_3)
+        pl = rh.Plane(pt_1, pt_2, pt_4)
+        t = rh.Transform.PlanarProjection(pl)
+        pt_5.Transform(t)
+
+        planar_poly = rh.PolylineCurve([pt_1, pt_2, pt_5, pt_4, pt_1])
+        polys[-1]["planar"] = planar_poly ## store planar poly with a different key
+```
+
+Now that the data is stored within dictionaries we need to retrieve it and put it into a simple list that can be passed to Grasshopper and visualized in Rhino (and to avoid the hack we saw earlier). Let's create two new variables, `original` and `planar`, to store the geometries as flat lists. To fill the two lists we can use [list comprehnesions](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions), a particularly useful feature of Python which can create a sort of one-line loop. Below the code and outside the two loops, type:
+
+```python
+original = [poly["original"] for poly in polys]
+planar = [poly["planar"] for poly in polys]
+```
+
+Now if you have the corresponding named outputs on the `Python` component you should see the geometry in the Rhino viewport. Connect the `Polylines` stored in the `planar` variable to the `Boundary Surfaces` component to ensure that the new panel outlines are indeed planar.
+
+![](images/1_08.png)
 
 ### Step 6. Model the panels
 
