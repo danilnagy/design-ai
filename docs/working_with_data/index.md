@@ -86,7 +86,7 @@ v_spacing = (d_2.Max - d_2.Min) / v_num
 print u_spacing, v_spacing
 ```
 
-Finally, we can create our nested `for` loop to iterate over the two directions of the grid. This is similar to the code from the last exercise, except instead of creating a `Point3d` directly with `XYZ` coordinates we are extracting a point from the surface with local `UV` coordinates. To space the points evenly along the surface we are using the calculate `u_spacing` and `v_spacing` which represent the distance between each point in the grid in local coordinates. Type the following following your code:
+Finally, we can create our nested `for` loop to iterate over the two directions of the grid. This is similar to the code from the [last exercise](https://design-ai.net/docs/setup/#setting-up-the-grid), except instead of creating a `Point3d` directly with `XYZ` coordinates we are extracting a point from the surface with local `UV` coordinates. To space the points evenly along the surface we are using the calculate `u_spacing` and `v_spacing` which represent the distance between each point in the grid in local coordinates. Type the following following your code:
 
 ```python
 pts = []
@@ -102,6 +102,81 @@ Make sure you have an output called `pts` created on the `Python` component. You
 ![](images/1_04.png)
 
 ### Step 4. Create the panels
+
+Now that we have our surface points generated we will start to generate the geometry of the surface panel by first drawing a `Polyline` representing the exterior outline of each panel.
+
+Right now our points are stored sequentially in a single list. This will make it difficult to access them in a structured way while generating the panel `Polylines`. To make this job easier, we will rework our data structure so that `pts` is now a list of lists, each of which represents just the points in a single row of the grid. The full code should now be:
+
+```python
+import Rhino.Geometry as rh
+
+d_1 = srf.Domain(0)
+d_2 = srf.Domain(1)
+
+print(d_1.Min, d_1.Max)
+print(d_2.Min, d_2.Max)
+
+u_spacing = (d_1.Max - d_1.Min) / u_num
+v_spacing = (d_2.Max - d_2.Min) / v_num
+
+print u_spacing, v_spacing
+
+pts = []
+
+for u in range(u_num + 1):
+    pts.append([]) ## for each row, we  first add an empty list
+    for v in range(int(v_num + 1)):
+        pt = srf.PointAt(u * u_spacing, v * v_spacing)
+        pts[-1].append(pt) ## after creating a new point we add it to the last list (representing the current row)
+```
+
+Now that the points are in a more useful structure, let's generate the panel geometry. First we'll create an empty list to store the generated `Polylines`:
+
+```python
+polys = []
+```
+
+Next, we'll iterate over the nested list structure of the `pts` variable, again with two loops. The outer loop will iterate over the lists representing each row of the grid, while the inner loop will iterate over each point in that list:
+
+```python
+for i, row in enumerate(pts[:-1]):
+    for j, pt_1 in enumerate(row[:-1]):
+```
+
+Notice that we are using `enumerate()` here, which gives us access to two variables for each loop, one that represents the index of an item in a list, and one that represents the item itself. This means inside of our inner loop we will have access to the following variables:
+
+- `i` - the index of the row
+- `j` - the index of the item in the row
+- `row` - the row itself
+- `pt_1` - the current point in the current row
+
+Using these variables, let's write code in the inner loop (indented two times) to get the other three points defining each panel:
+
+```python
+        pt_2 = row[j+1]
+        next_row = pts[i+1]
+        pt_3 = next_row[j+1]
+        pt_4 = next_row[j]
+
+        poly = rh.PolylineCurve([pt_1, pt_2, pt_3, pt_4, pt_1])
+        polys.append(poly)
+```
+
+Make sure you use the right indices based on the `i` and `j` variables for the right points so that they are in the proper order going around each panel. If the points are in the wrong order the `Polylines` may appear distorted or twisted when you view them in Rhino.
+
+If you have an output called `polys` created on the `Python` component you should now see the `Polylines` defining the boundary of each facade panel.
+
+{: .note }
+
+> You might have noticed that the points went away in the Rhino viewport 😱. This is because Grasshopper has trouble visualizing datasets exported from Python using nested loops. To view these geometries in Grasshopper quickly you can use a hack. Create a new Python component and copy and paste into the script the code:
+>
+> ```python
+> a = x
+> ```
+>
+> Then connect the nested list output into the `x` input. The `a` output should now be the same data but structured in a Grasshopper-friendly data try, with each nested list of points represented on it's own branch. As a bonus you should now see the point geometry rendered in the Rhino viewport as well
+
+![](images/1_05.png)
 
 Iterate over grid to create panel outlines - polylines, store in list and output to grasshopper
 
