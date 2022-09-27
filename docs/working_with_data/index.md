@@ -19,7 +19,7 @@ Files you will need for this tutorial:
 
 ### Step 1. Create the surface
 
-Use the `Plane` command in Rhino to create a vertical surface 10 units wide and 15 units high.
+The first step is to create a Surface which will define our facade. We will model this as a surface in the Rhino model and import it into Grasshopper so that we can later modify the surface and have the facade respond. To create the Surface object, use the `Plane` command in Rhino to create a vertical surface 10 units wide and 15 units high.
 
 {: .challenge-title }
 
@@ -37,11 +37,19 @@ Use the `Plane` command in Rhino to create a vertical surface 10 units wide and 
 
 ![](images/1_01.png)
 
-Model and import surface, bring into Python
+Now that we have the surface modelled we need to first import it into Grasshopper and then pass it into a `Python` component so we can start to work with it. First, use a `Geometry Pipeline` component to bring in the the surface by Layer name, then plug it into one of the inputs of a `Python` component. You can rename the input as you with, just remember that the surface will be available through that variable name in the Python code. Also remember to set the _Type hint_ to **Surface** so that you can work directly with the geometry object.
+
+![](images/1_02.png)
+
+### Step 2. Get the surface Domains
 
 Get domains from surface
 
-Create grid: double loop to extract nested lists of points from surface
+### Step 3. Create the grid
+
+double loop to extract nested lists of points from surface
+
+### Step 4. Create the panels
 
 Iterate over grid to create panel outlines - polylines, store in list and output to grasshopper
 
@@ -49,11 +57,17 @@ Planar surf panels
 
 Move surface, observe that outlines break planarity
 
+### Step 5. Make the panels planar
+
 Ensure boundaries are planar - project corner point to plane along x-axis
 
 Store new boundary in dict data structure
 
 Extract both boundaries to gh
+
+Ensure planar srf works
+
+### Step 6. Model the panels
 
 Loft to create edges
 
@@ -63,5 +77,16 @@ Extrude
 
 Planar surf - panels still planar
 
-Challenge 1 - extrude along panel normal
-Challenge 2 - move minimal corner
+{: .challenge-title }
+
+> Challenge 1
+>
+> extrude along panel normal.
+
+{: .challenge-title }
+
+> Challenge 2
+>
+> move minimal corner.
+
+## Conclusion
