@@ -21,7 +21,7 @@ Files you will need for this tutorial:
 
 The first step is to create a Surface which will define our facade. We will model this as a surface in the Rhino model and import it into Grasshopper so that we can later modify the surface and have the facade respond. To create the Surface object, use the `Plane` command in Rhino to create a vertical surface 10 units wide and 15 units high.
 
-{: .challenge-title }
+{: .note-title }
 
 > Tip
 >
