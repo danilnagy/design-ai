@@ -56,22 +56,50 @@ To understand the spacing of the points on the grid, we need to know about its _
 {: .note }
 Locating a point on a surface based on its local coordinate system should not be unfamiliar. It is the same way we locate places on the Earth. If we want to describe the location of a place we don't use it's absolute `XYZ` coordinates in the 3d space of the universe relative to the sun. Instead we use two coordinates (latitude and longitude) which run in two directions along the surface of the Earth. In a similar way, understanding curvature and local coordinate systems will help us locate points on the surface to place our panels.
 
-To get the domain of the surface in its two directions, use the [`Domain()`](https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_Geometry_Surface_Domain.htm) method of the [`Surface`](https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_Geometry_Surface.htm) Class. This method takes in one input which is the direction (integer 0 or 1) and returns an instance of the `Domain` class. You can print the `Domain` objects to make sure that the represent the extents of the surface ([0,10] representing the 10 unit width and [0,15] representing the 15 unit height).
+To get the domain of the surface in its two directions, use the [`Domain()`](https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_Geometry_Surface_Domain.htm) method of the [`Surface`](https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_Geometry_Surface.htm) Class. This method takes in one input which is the direction (integer 0 or 1) and returns an instance of the `Domain` class. You can print the `Min` and `Max` properties of the `Domain` object to see that they represent the extents of the surface ([0,10] representing the 10 unit width and [0,15] representing the 15 unit height).
 
 ```python
 d_1 = srf.Domain(0)
 d_2 = srf.Domain(1)
 
-print(d_1, d_2)
+print(d_1.Min, d_1.Max)
+print(d_2.Min, d_2.Max)
 ```
 
 This should print something like this to the Output console:
 
 ```
-(<Rhino.Geometry.Interval object at 0x000000000000003F [0,10]>, <Rhino.Geometry.Interval object at 0x0000000000000040 [0,15]>)
+(0.0, 10.0)
+(0.0, 15.0)
 ```
 
-double loop to extract nested lists of points from surface
+Now that we have the domains of the surface, we can calculate the spacing to use between points as we lay out the grid. First, create two new inputs for the `Python` component in Grasshopper called `u_num` and `v_num` and set their _Type hint_ to **int**. These inputs will control the number of panels generated in both directions along the surface.
+
+![](images/1_03.png)
+
+Now you can use the domain of the surface as well as the new parameters to calculate the spacing of points in both directions:
+
+```python
+u_spacing = (d_1.Max - d_1.Min) / u_num
+v_spacing = (d_2.Max - d_2.Min) / v_num
+
+print u_spacing, v_spacing
+```
+
+Finally, we can create our nested `for` loop to iterate over the two directions of the grid. This is similar to the code from the last exercise, except instead of creating a `Point3d` directly with `XYZ` coordinates we are extracting a point from the surface with local `UV` coordinates. To space the points evenly along the surface we are using the calculate `u_spacing` and `v_spacing` which represent the distance between each point in the grid in local coordinates. Type the following following your code:
+
+```python
+pts = []
+
+for u in range(u_num + 1):
+    for v in range(int(v_num + 1)):
+        pt = srf.PointAt(u * u_spacing, v * v_spacing)
+        pts.append(pt)
+```
+
+Make sure you have an output called `pts` created on the `Python` component. You should now see the grid of points laying evenly along the surface.
+
+![](images/1_04.png)
 
 ### Step 4. Create the panels
 
