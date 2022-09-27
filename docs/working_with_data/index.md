@@ -168,7 +168,7 @@ If you have an output called `polys` created on the `Python` component you shoul
 
 {: .note }
 
-> You might have noticed that the points went away in the Rhino viewport 😱. This is because Grasshopper has trouble visualizing datasets exported from Python using nested loops. To view these geometries in Grasshopper quickly you can use a hack. Create a new Python component and copy and paste into the script the code:
+> You might have noticed that the points went away in the Rhino viewport 😱. This is because Grasshopper has trouble visualizing datasets exported from Python using nested loops. To view these geometries in Grasshopper quickly you can use a hack. Create a new Python component and copy and paste a single line of code into the script:
 >
 > ```python
 > a = x
@@ -178,11 +178,9 @@ If you have an output called `polys` created on the `Python` component you shoul
 
 ![](images/1_05.png)
 
-Iterate over grid to create panel outlines - polylines, store in list and output to grasshopper
+To visualize the geometry of the panels we can use the `Boundary Surfaces` component in Grasshopper to create a planar surface within each `Polyline` boundary. At this point it might be interesting to try to rebuild the surface with more control points and then deform the surface shape by moving its control points. Notice how as you deform the surface, certain areas of panels disappear. This is because as the points move on the deformed surface, the four points defining the corners of each panel do not necessarily stay coplanar, which causes the `Boundary Surfaces` component to fail.
 
-Planar surf panels
-
-Move surface, observe that outlines break planarity
+![](images/1_06.gif)
 
 ### Step 5. Make the panels planar
 
