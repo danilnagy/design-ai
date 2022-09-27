@@ -184,7 +184,27 @@ To visualize the geometry of the panels we can use the `Boundary Surfaces` compo
 
 ### Step 5. Make the panels planar
 
-Ensure boundaries are planar - project corner point to plane along x-axis
+For the final code portion of the exercise we will fix this issue by enforcing planarity in the panels. Making things planar is a big deal in the field of rationalization, which deals with refining geometry to make it more buildable. This is because most building materials come in flat sheets, so the closer you can approximate a shape with a planar surface the cheaper it is, generally, to build.
+
+There are several approaches you can take to ensuring that the panels are planar, each of which might result in somewhat different panel shapes. For this example, our approach will be to construct a plane using three of the four corner points, and then projecting the fourth corner point onto this plane. This will by definition ensure that the four points are coplanar, while only moving one of the four points.
+
+Add the following code below your current script, still within the inner `for` loop (indented two times):
+
+```python
+        pt_5 = rh.Point3d(pt_3)
+        pl = rh.Plane(pt_1, pt_2, pt_4)
+        t = rh.Transform.PlanarProjection(pl)
+        pt_5.Transform(t)
+
+        planar_poly = rh.PolylineCurve([pt_1, pt_2, pt_5, pt_4, pt_1])
+        polys.append(planar_poly)
+```
+
+You should now see another set of panels overlapping the previous. If you have a deformed surface you should see doubled panels in flat areas of the surface and new planar panels in curved areas.
+
+![](images/1_07.png)
+
+We are seeing overlapping panels because we are adding both the original `Polyline` as well as the new flattened one to the `polys` list. Because we are now generated multiple items for each panel, we can organize the data a little better using dictionaries.
 
 Store new boundary in dict data structure
 
