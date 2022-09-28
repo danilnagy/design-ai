@@ -19,7 +19,7 @@ Files you will need for this tutorial:
 
 ### Step 1. Create the surface
 
-The first step is to create a Surface which will define our facade. We will model this as a surface in the Rhino model and import it into Grasshopper so that we can later modify the surface and have the facade respond. To create the Surface object, use the `Plane` command in Rhino to create a vertical surface 10 units wide and 15 units high.
+The first step is to create a surface which will define our facade. We will model this as a `Surface` object in Rhino and import it into Grasshopper so we can work with it in Python. To create the `Surface`, use the `Plane` command in Rhino to create a vertical `Surface` 10 units wide and 15 units high.
 
 {: .note-title }
 
@@ -37,13 +37,13 @@ The first step is to create a Surface which will define our facade. We will mode
 
 ![](images/1_01.png)
 
-Now that we have the surface modelled we need to first import it into Grasshopper and then pass it into a `Python` component so we can start to work with it. First, use a `Geometry Pipeline` component to bring in the the surface by Layer name, then plug it into one of the inputs of a `Python` component. You can rename the input if you wish, just remember that the surface will be available through that variable name in the Python code. Also remember to set the _Type hint_ to **Surface** so that you can work directly with the object's geometry.
+Next, let's use a `Geometry Pipeline` component to bring the Surface into Grasshopper, making sure that you've selected the proper geometry type and entered the name of the layer the surface is on. Now, plug the output of the `Geometry Pipeline` component into one of the inputs of a new `Python` component. You can rename the input as you wish, just remember that the surface will be available through that variable name in the Python code. Also remember to set the _Type hint_ to **Surface** so that you can work directly with the object's geometry.
 
 ![](images/1_02.png)
 
 ### Step 2. Create the point grid
 
-Let's start developing the code for this example. Double-click the `Python` component to open the code edit. Delete any code already there and on the first line import the `Rhino.Geometry` library:
+Let's start developing the code for this example. Double-click the `Python` component to open the code editor. Delete any code already there and on the first line import the `Rhino.Geometry` library:
 
 ```python
 import Rhino.Geometry as rh
@@ -56,7 +56,7 @@ To understand the spacing of the points on the grid, we need to know about its _
 {: .note }
 Locating a point on a surface based on its local coordinate system should not be unfamiliar. It is the same way we locate places on the Earth. If we want to describe the location of a place we don't use it's absolute `XYZ` coordinates in the 3d space of the universe relative to the sun. Instead we use two coordinates (latitude and longitude) which run in two directions along the surface of the Earth. In a similar way, understanding curvature and local coordinate systems will help us locate points on the surface to place our panels.
 
-To get the domain of the surface in its two directions, use the [`Domain()`](https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_Geometry_Surface_Domain.htm) method of the [`Surface`](https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_Geometry_Surface.htm) Class. This method takes in one input which is the direction (integer 0 or 1) and returns an instance of the `Domain` class. You can print the `Min` and `Max` properties of the `Domain` object to see that they represent the extents of the surface ([0,10] representing the 10 unit width and [0,15] representing the 15 unit height).
+To get the domain of the surface in its two directions, use the [`Domain()`](https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_Geometry_Surface_Domain.htm) method of the [`Surface`](https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_Geometry_Surface.htm) Class. This method takes in one input which is the direction (integer 0 or 1) and returns an instance of the [`Domain`]() class. You can print the `Min` and `Max` properties of the resulting `Domain` object to see that they represent the extents of the surface ([0,10] representing the 10 unit width and [0,15] representing the 15 unit height).
 
 ```python
 d_1 = srf.Domain(0)
@@ -86,7 +86,7 @@ v_spacing = (d_2.Max - d_2.Min) / v_num
 print u_spacing, v_spacing
 ```
 
-Finally, we can create our nested `for` loop to iterate over the two directions of the grid. This is similar to the code from the [last exercise](https://design-ai.net/docs/setup/#setting-up-the-grid), except instead of creating a `Point3d` directly with `XYZ` coordinates we are extracting a point from the surface with local `UV` coordinates. To space the points evenly along the surface we are using the calculate `u_spacing` and `v_spacing` which represent the distance between each point in the grid in local coordinates. Type the following following your code:
+Finally, we can create our nested `for` loops to iterate over the two directions of the grid. This is similar to the code from the [last exercise](https://design-ai.net/docs/setup/#setting-up-the-grid), except instead of creating a `Point3d` directly with `XYZ` coordinates we are extracting a point from the surface with local `UV` coordinates. To space the points evenly along the surface we are using the calculated `u_spacing` and `v_spacing` which represent the distance between each point in local coordinates. Write the following code to create the grid of points:
 
 ```python
 pts = []
@@ -97,15 +97,17 @@ for u in range(u_num + 1):
         pts.append(pt)
 ```
 
+Notice that when we create a set of integers to iterate over using the `range()` function, we are adding 1 to both `u_num` and `v_num`. This is because we need to generate one extra row and column of points to make sure we have enough points to generate all the panels required.
+
 Make sure you have an output called `pts` created on the `Python` component. You should now see the grid of points laying evenly along the surface.
 
 ![](images/1_04.png)
 
 ### Step 4. Create the panels
 
-Now that we have our surface points generated we will start to generate the geometry of the surface panel by first drawing a `Polyline` representing the exterior outline of each panel.
+Now that we have our surface points generated we will start to generate the geometry of the panel itself. We will start by drawing a `Polyline` representing the exterior outline of each panel.
 
-Right now our points are stored sequentially in a single list. This will make it difficult to access them in a structured way while generating the panel `Polylines`. To make this job easier, we will rework our data structure so that `pts` is now a list of lists, each of which represents just the points in a single row of the grid. The full code should now be:
+Right now our points are stored sequentially in a single list. This will make it difficult to access them in a structured way while generating the panel `Polylines`. To make this job easier, we will rework our data structure so that `pts` is a list of lists, each of which represents just the points in a single row of the grid. Below is the full code to this point (the changed lines are marked with comments):
 
 ```python
 import Rhino.Geometry as rh
@@ -130,7 +132,7 @@ for u in range(u_num + 1):
         pts[-1].append(pt) ## after creating a new point we add it to the last list (representing the current row)
 ```
 
-Now that the points are in a more useful structure, let's generate the panel geometry. First we'll create an empty list to store the generated `Polylines`:
+Now that the points are in a more useful structure, let's start to generate the panel geometry. First we'll create an empty list to store the generated `Polylines`. Below your current code and outside of any loops add the line:
 
 ```python
 polys = []
@@ -143,14 +145,16 @@ for i, row in enumerate(pts[:-1]):
     for j, pt_1 in enumerate(row[:-1]):
 ```
 
-Notice that we are using `enumerate()` here, which gives us access to two variables for each loop, one that represents the index of an item in a list, and one that represents the item itself. This means inside of our inner loop we will have access to the following variables:
+Notice that when we iterate over the `pts` list as well as each `row`, we are taking all elements except for the last. This is because we actually want to create one less panel in each direction than we have points.
+
+Notice also that we are using `enumerate()` here, which gives us access to two variables for each loop, one that represents the index of an item in a list, and one that represents the item itself. This means inside of our inner loop we will have access to the following variables:
 
 - `i` - the index of the row
 - `j` - the index of the item in the row
 - `row` - the row itself
 - `pt_1` - the current point in the current row
 
-Using these variables, let's write code in the inner loop (indented two times) to get the other three points defining each panel:
+Using these variables, let's write code within the inner loop (indented two times) to get the other three points defining each panel:
 
 ```python
         pt_2 = row[j+1]
@@ -174,7 +178,7 @@ If you have an output called `polys` created on the `Python` component you shoul
 > a = x
 > ```
 >
-> Then connect the nested list output into the `x` input. The `a` output should now be the same data but structured in a Grasshopper-friendly data try, with each nested list of points represented on it's own branch. As a bonus you should now see the point geometry rendered in the Rhino viewport as well
+> Then connect the nested list output into the `X` input. The `A` output should now be the same data but structured in a Grasshopper-friendly Data Tree, with each nested list of points organized on its own branch. As a bonus you should now see the point geometry rendered in the Rhino viewport once again.
 
 ![](images/1_05.png)
 
@@ -184,7 +188,7 @@ To visualize the geometry of the panels we can use the `Boundary Surfaces` compo
 
 ### Step 5. Make the panels planar
 
-For the final code portion of the exercise we will fix this issue by enforcing planarity in the panels. Making things planar is a big deal in the field of rationalization, which deals with refining geometry to make it more buildable. This is because most building materials come in flat sheets, so the closer you can approximate a shape with a planar surface the cheaper it is, generally, to build.
+For the final code portion of this exercise we will fix this issue by enforcing planarity in the panels. Making things planar is a big deal in the field of rationalization, which deals with refining geometry to make it more buildable. This is because most building materials come in flat sheets, so the closer you can approximate a shape with a planar surface the cheaper it is, generally, to build.
 
 There are several approaches you can take to ensuring that the panels are planar, each of which might result in somewhat different panel shapes. For this example, our approach will be to construct a plane using three of the four corner points, and then projecting the fourth corner point onto this plane. This will by definition ensure that the four points are coplanar, while only moving one of the four points.
 
@@ -231,7 +235,7 @@ for i, row in enumerate(pts[:-1]):
         polys[-1]["planar"] = planar_poly ## store planar poly with a different key
 ```
 
-Now that the data is stored within dictionaries we need to retrieve it and put it into a simple list that can be passed to Grasshopper and visualized in Rhino (and to avoid the hack we saw earlier). Let's create two new variables, `original` and `planar`, to store the geometries as flat lists. To fill the two lists we can use [list comprehnesions](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions), a particularly useful feature of Python which can create a sort of one-line loop. Below the code and outside the two loops, type:
+Now that the data is stored within dictionaries we need to retrieve it and put it into a simple list that can be passed to Grasshopper and visualized in Rhino (and to avoid the hack we saw earlier). Let's create two new variables, `original` and `planar`, to store the geometries as flat lists. To fill the two lists we can use [list comprehnesions](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions), a particularly useful feature of Python which can create a sort of one-line loop. Under your existing code and outside the two loops, type:
 
 ```python
 original = [poly["original"] for poly in polys]
@@ -328,7 +332,7 @@ If you get stuck anywhere along the way, you can download the finished model usi
 
 > Challenge 1
 >
-> Can you modify the code so that instead of the same point being chosen to be projected each time, the point is chosen which needs to be moved the lease in order to make the panel planar. This is another kind of optimization since minimal moving the points would also cause the panels to follow the geometry closer and would minimize the material required for the side pieces
+> Can you modify the code so that instead of the same point being chosen to be projected each time, the point is chosen which needs to be moved the least in order to make the panel planar? This is another kind of optimization since minimally moving the points would also cause the panels to follow the geometry closer and would minimize the material required for the side panels.
 >
 > ![](images/1_10.gif)
 
@@ -336,6 +340,6 @@ If you get stuck anywhere along the way, you can download the finished model usi
 
 > Challenge 2
 >
-> Currently, the direction we move the corner point is based on the nearest distance to the plane we're projecting it to. Can you modify the code so that the corners always move in the same direction as the normal at that point on the surface. This is a further optimization because it will ensure that the panel side edges line up between adjacent panels.
+> Currently, the direction we move the corner point is based on the nearest distance to the plane we're projecting it to. Can you modify the code so that the corners always move in the same direction as the normal at that point on the surface? This is a further optimization because it will ensure that the panel side edges line up between adjacent panels.
 >
 > ![](images/1_11.png)
