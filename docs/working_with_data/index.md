@@ -12,7 +12,7 @@ Files you will need for this tutorial:
 
 | Start with these files          | In case you get lost, you can download the final solution here |
 | :------------------------------ | :------------------------------------------------------------- |
-| [1_start.3dm](data/1_start.3dm) |                                                                |
+| [1_start.3dm](data/1_start.3dm) | [1_end.3dm](data/1_end.3dm)                                    |
 | [1_start.gh](data/1_start.gh)   | [1_end.gh](data/1_end.gh)                                      |
 
 ## Introduction
