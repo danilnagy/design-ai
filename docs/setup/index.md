@@ -153,38 +153,6 @@ Now run the script and make sure that your results are similar to below. You sho
 ![](images/0_05.gif)
 
 ```python
-##0-gv2325
-
-import Rhino.Geometry as rh
-import Rhino as r
-
-points = []
-circles = []
-
-print("hello world!")
-
-for x in range(int(x_num)):
-    for y in range(int(y_num)):
-            print("test")
-            
-            point = rh.Point3d(x*spacing,y*spacing,0.0)
-            points.append(point)
-            
-            dist = point.DistanceTo(attractor)
-            
-            if dist <= 2:
-                radius = 0.25
-            elif dist <= 5:
-                radius = 0.75
-            else:
-                radius = 1
-            
-            circle = rh.Circle(point, radius)
-            
-            circles.append(circle)
-
-##1-gv2325
-
 import Rhino.Geometry as rh
 
 #print srf
@@ -237,8 +205,55 @@ for u in range(u_num):
         #making a list for the points and place them in inner list
         inner_list.append(pt)
         
+        pts[-1][-1]
 
 print pts
+
+panels = []
+
+
+for i, row in enumerate(pts[:-1]):
+    
+    for j, pt_1 in enumerate(row[:-1]):
+        
+        panel = {}
+        
+        pt_2 = row[j+1]
+        
+        next_row = pts[i+1]
+        
+        pt_3 = next_row[j+1]
+        pt_4 = next_row[j]
+        
+        poly = rh.PolylineCurve([pt_1,pt_2,pt_3,pt_4,pt_1])
+        
+        panel["original_boundary"] = poly
+        
+#       polys.append(panels)
+        
+        #make a plane
+        pl = rh.Plane(pt_1, pt_2, pt_4)
+        
+        #new variable to store planar srfs tranform
+        t = rh.Transform.PlanarProjection(pl)
+        
+        #object to apply the above t transformation to
+        pt_5 = rh.Point3d(pt_3)
+        
+        pt_5.Transform(t)
+        
+        #new projected panels replaced pt_3 with transformed copy
+        proj_poly = rh.PolylineCurve([pt_1,pt_2,pt_5,pt_4,pt_1])
+        
+        panel["projected_boundary"] = proj_poly
+        
+        panels.append(panel)
+
+polys = []
+
+for panel in panels:
+    
+    print panel
 ```
 
 # Working with Github
