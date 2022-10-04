@@ -347,68 +347,101 @@ If you get stuck anywhere along the way, you can download the finished model usi
 Once you're done implementing the challenges, paste your final code below and create a pull request on this page called `1-your_uni` (for example `1-dn2216`). The code below contains some hints to consider as you implement your solution.
 
 ```python
+import rhinoscriptsyntax as rs
 import Rhino.Geometry as rh
 
+print rh.PlaneSurface.IsValid
+print srf.IsValid
+
 d_1 = srf.Domain(0)
+
+u_min = d_1.Min
+u_max = d_1.Max
+
+print u_min, u_max
+
 d_2 = srf.Domain(1)
 
-print(d_1.Min, d_1.Max)
-print(d_2.Min, d_2.Max)
+v_min = d_2.Min
+v_max = d_2.Max
 
-u_spacing = (d_1.Max - d_1.Min) / u_num
-v_spacing = (d_2.Max - d_2.Min) / v_num
-
-print u_spacing, v_spacing
+print v_min, v_max
 
 pts = []
 
-for u in range(u_num + 1):
-    pts.append([])
-    for v in range(int(v_num + 1)):
-        pt = srf.PointAt(u * u_spacing, v * v_spacing)
-        pts[-1].append(pt)
+u_inc = u_max/(u_num-1)
+v_inc = v_max/(v_num-1)
 
-polys = []
+for u in range(u_num):
+    
+    pts.append([])
+    
+    for v in range(v_num):
+        pt = srf.PointAt(u * u_inc,v * v_inc)
+        inner_list = pts[-1]
+        inner_list.append(pt)
+        
+        
+        
+        
+        
+        
+panels = []
 
 for i, row in enumerate(pts[:-1]):
+    
     for j, pt_1 in enumerate(row[:-1]):
-
-        polys.append({})
-
+        
+        panel = {}
+        
         pt_2 = row[j+1]
+        
         next_row = pts[i+1]
+        
         pt_3 = next_row[j+1]
         pt_4 = next_row[j]
-
+        
         poly = rh.PolylineCurve([pt_1, pt_2, pt_3, pt_4, pt_1])
-        polys[-1]["original"] = poly
-
-        ## CHALLENGE 1: here we always move the same point (pt_3). To solve this challenge, make a loop that iterates over every options of
-        ## corner point and tests how far each needs to move to be planar with the other three points. Then after the loops has run,
-        ## create the boundary polyline using the case with the least distance
-
-        pt_5 = rh.Point3d(pt_3)
-        pl = rh.Plane(pt_1, pt_2, pt_4)
-
-        ## CHALLENGE 2: here we are using a PlanarProjection to move the point to its closest location on the plane.
-        ## To move the point instead in the direction of the surface normal at that point, you can first use the srf.ClosestPoint() method to
-        ## find the U and V coordinates at the corner point and then the srf.NormalAt() method to get the normal vector at that location.
-        ## Finally, to find the location of the point you can create a line starting at the corner point and going in the direction of the
-        ## normal, and then intersect this line with the plane using rh.Intersect.Intersection.LinePlane() to get the point. By definition
-        ## this point will be planar with the other three points and aligned with the original point along the surface normal.
-
+        
+        panel["original_boundary"] = poly
+        
+        #polys.append(poly)
+        
+        corners = [pt_1, pt_2, pt_3, pt_4]
+        move_distances = []
+        for k, test_corner in enumerate(corners):
+            other_corners = corners[:k]+corners[k+1:]
+        
+            test_plane = rh.Plane(*other_corners)
+            move_distance = test_plane.DistanceTo(test_corner)
+            move_distances.append(move_distance)
+        
+        min_list = min(move_distances)
+        min_index = move_distances.index(min(move_distances))
+    
+        plane_corners = corners[:min_index]+corners[min_index+1:]
+        pl = rh.Plane(*plane_corners)
+        
+        rh.Surface(
+        
         t = rh.Transform.PlanarProjection(pl)
+        
+        pt_5 = rh.Point3d(corners[min_index])
         pt_5.Transform(t)
+        corners[min_index] = pt_5
+        corners.append(corners[0])
+        
+        projected_poly = rh.PolylineCurve(corners)
+        panel["projected_boundary"] = projected_poly
+        panels.append(panel)
+        
+        #polys.append(projected_poly)
+        
+polys = []
 
-        planar_poly = rh.PolylineCurve([pt_1, pt_2, pt_5, pt_4, pt_1])
-        polys[-1]["planar"] = planar_poly
-
-        polys[-1]["edge"] = []
-        if pt_3.DistanceTo(pt_5) > 0.01:
-            polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_5, pt_3, pt_2]))
-            polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_5, pt_4]))
-
-original = [poly["original"] for poly in polys]
-planar = [poly["planar"] for poly in polys]
-edge = [poly["edge"] for poly in polys]
+for panel in panels:
+    
+    poly = panel["projected_boundary"]
+    
+    polys.append(poly)
 ```
