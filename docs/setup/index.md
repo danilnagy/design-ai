@@ -10,10 +10,10 @@ In this tutorial we will develop a simple attractor point model to make sure tha
 
 Files you will need for this tutorial:
 
-| Start with these files                  | In case you get lost, you can download the final solution here |
-| :-------------------------------------- | :------------------------------------------------------------- |
+| Start with these files          | In case you get lost, you can download the final solution here |
+| :------------------------------ | :------------------------------------------------------------- |
 | [0_start.3dm](data/0_start.3dm) |                                                                |
-| [0_start.gh](data/0_start.gh)   | [0_end.gh](data/0_end.gh)                              |
+| [0_start.gh](data/0_start.gh)   | [0_end.gh](data/0_end.gh)                                      |
 
 ## Introduction
 
@@ -153,11 +153,15 @@ Now run the script and make sure that your results are similar to below. You sho
 ![](images/0_05.gif)
 
 ```python
+## Once you are done, paste your final script code here and create a pull request called:
+## 0-your_uni (for example `0-dn2216`)
+
 import Rhino.Geometry as rh
 
 points = []
 circles = []
 
+<<<<<<< HEAD
 print("hi")
 
 print(attractor)
@@ -176,6 +180,18 @@ for x in range(x_num):
         elif dist <=4:
             radius = 0.5
         
+=======
+for x in range(x_num):
+    for y in range(y_num):
+        ## HINT: use the `spacing` parameter to control the location of each grid point
+        point = rh.Point3d(x, y, 0.0)
+        points.append(point)
+
+        dist = point.DistanceTo(attractor)
+
+        ## HINT: change this to assign a discrete instead of a continuous value for the radius
+        radius = dist / 5.0
+>>>>>>> c6ec866529938bfe4081a041f0a4cb19c337df2f
         circle = rh.Circle(point, radius)
         circles.append(circle)
 ```
