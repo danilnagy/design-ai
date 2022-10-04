@@ -348,6 +348,7 @@ Once you're done implementing the challenges, paste your final code below and cr
 
 ```python
 ## 1-lr3102
+##
 
 import Rhino.Geometry as rh
 
@@ -451,8 +452,8 @@ for i, row in enumerate(pts[:-1]):
                  
                  
         if pt_4.DistanceTo(pt_4t) > 0.01:
-                 polys [-1] ["edge"].append(rh.PolylineCurve([pt_3, pt_ 4t, pt_ 4, pt_3]))
-                 polys [-1] ["edge"].append(rh.PolylineCurve([pt_1, pt_ 4, pt_ 4t, pt_1]))
+                 polys [-1] ["edge"].append(rh.PolylineCurve([pt_3, pt_4t, pt_ 4, pt_3]))
+                 polys [-1] ["edge"].append(rh.PolylineCurve([pt_1, pt_ 4, pt_4t, pt_1]))
                  polys[-1] ["planar"] = planar_poly ## store planar poly with a different key
                  original = [poly["original"] for poly in polys]
                  planar= [poly["planar"] for poly in polys]
