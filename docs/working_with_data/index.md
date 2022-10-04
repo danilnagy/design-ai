@@ -347,6 +347,9 @@ If you get stuck anywhere along the way, you can download the finished model usi
 Once you're done implementing the challenges, paste your final code below and create a pull request on this page called `1-your_uni` (for example `1-dn2216`). The code below contains some hints to consider as you implement your solution.
 
 ```python
+## 1-gv2325 
+## I have not understood how to resolve the challenge 2.
+## Used help from a classmate to understand the code and concept.
 import Rhino.Geometry as rh
 
 d_1 = srf.Domain(0)
