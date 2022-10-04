@@ -348,6 +348,7 @@ Once you're done implementing the challenges, paste your final code below and cr
 
 ```python
 ## 1-np2837
+##Source from Zoe
 import Rhino.Geometry as rh
 
 d_1 = srf.Domain(0)
@@ -417,7 +418,6 @@ for i, row in enumerate(pts[:-1]):
         ## normal, and then intersect this line with the plane using rh.Intersect.Intersection.LinePlane() to get the point. By definition
         ## this point will be planar with the other three points and aligned with the original point along the surface normal.
         
-        ## Same issue as above
         
         
         if ((pt_1.DistanceTo(pt_1) < pt_2.DistanceTo(pt_2)) and (pt_1.DistanceTo(pt_1) < pt_3.DistanceTo(pt_3)) 
