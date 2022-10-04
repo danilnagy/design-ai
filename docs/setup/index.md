@@ -161,18 +161,37 @@ import Rhino.Geometry as rh
 points = []
 circles = []
 
+print("hello world!")
+
 for x in range(x_num):
     for y in range(y_num):
-        ## HINT: use the `spacing` parameter to control the location of each grid point
-        point = rh.Point3d(x, y, 0.0)
+        x_spaced = x * spacing
+        y_spaced = y * spacing
+        point = rh.Point3d(x_spaced, y_spaced, 0.0)
         points.append(point)
-
+        
         dist = point.DistanceTo(attractor)
-
-        ## HINT: change this to assign a discrete instead of a continuous value for the radius
-        radius = dist / 5.0
-        circle = rh.Circle(point, radius)
+        
+        r = dist / 5.0
+        
+        if dist <= 0.5:
+            
+            r = 0.2
+        
+        elif dist > 2:
+            
+            r = 0.5
+            
+        else:
+            r = 0.3
+        
+        circle = rh.Circle(point, r)
+        
         circles.append(circle)
+        
+        
+        
+        
 ```
 
 # Working with Github
