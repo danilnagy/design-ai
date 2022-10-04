@@ -1,4 +1,9 @@
 {
   "editor.formatOnSave": true,
-  "cSpell.words": ["Polylines"]
+  "cSpell.words": [
+    "Polylines"
+  ],
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "gh-pages"
+  ]
 }
