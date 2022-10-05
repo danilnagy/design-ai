@@ -385,7 +385,7 @@ for i, row in enumerate(pts[:-1]):
 
         ## CHALLENGE 1: here we always move the same point (pt_3). To solve this challenge, make a loop that iterates over every options of
         ## corner point and tests how far each needs to move to be planar with the other three points. Then after the loops has run,
-        ## create the boundary polyline using the case with the least distance
+        ## create the boundary polyline using the case with the least distance.  
 
         pt_5 = rh.Point3d(pt_3)
         pl = rh.Plane(pt_1, pt_2, pt_4)
@@ -395,7 +395,7 @@ for i, row in enumerate(pts[:-1]):
         ## find the U and V coordinates at the corner point and then the srf.NormalAt() method to get the normal vector at that location.
         ## Finally, to find the location of the point you can create a line starting at the corner point and going in the direction of the
         ## normal, and then intersect this line with the plane using rh.Intersect.Intersection.LinePlane() to get the point. By definition
-        ## this point will be planar with the other three points and aligned with the original point along the surface normal.
+        ## this point will be planar with the other three points and aligned with the original point along the surface normal.  
 
         t = rh.Transform.PlanarProjection(pl)
         pt_5.Transform(t)
@@ -409,6 +409,7 @@ for i, row in enumerate(pts[:-1]):
             polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_5, pt_4]))
 
 original = [poly["original"] for poly in polys]
+#Define in output
 planar = [poly["planar"] for poly in polys]
 edge = [poly["edge"] for poly in polys]
 ```
