@@ -372,8 +372,8 @@ polys = []
 
 for i, row in enumerate(pts[:-1]):
     for j, pt_1 in enumerate(row[:-1]):
-
-        polys.append({})
+ 
+        polys.append({}) ## empty dictionary appended to list
 
         pt_2 = row[j+1]
         next_row = pts[i+1]
@@ -387,6 +387,29 @@ for i, row in enumerate(pts[:-1]):
         ## corner point and tests how far each needs to move to be planar with the other three points. Then after the loops has run,
         ## create the boundary polyline using the case with the least distance
 
+        pl_1 = rh.Plane(pt_2, pt_3, pt_4)
+        t_1 = rh.Transform.PlanarProjection(pl_1)
+        pt_1t = rh.Point3d(pt_1)
+        pt_1t.Transform(t_1)
+        
+        pl_2 = rh.Plane(pt_1, pt_3, pt_4)
+        t_2 = rh.Transform.PlanarProjection(pl_2)
+        pt_2t = rh.Point3d(pt_2)
+        pt_2t.Transform(t_2)
+        
+        pl_3 = rh.Plane(pt_1, pt_2, pt_4)
+        t_3 = rh.Transform.PlanarProjection(pl_3)
+        pt_3t = rh.Point3d(pt_3)
+        pt_3t.Transform(t_3)
+        
+        pl_4 = rh.Plane(pt_1, pt_2, pt_3)
+        t_4 = rh.Transform.PlanarProjection(pl_4)
+        pt_4t = rh.Point3d(pt_4)
+        pt_4t.Transform(t_4)
+        
+        polys [-1] ["edge"] = []
+        
+        
         pt_5 = rh.Point3d(pt_3)
         pl = rh.Plane(pt_1, pt_2, pt_4)
 
@@ -397,6 +420,40 @@ for i, row in enumerate(pts[:-1]):
         ## normal, and then intersect this line with the plane using rh.Intersect.Intersection.LinePlane() to get the point. By definition
         ## this point will be planar with the other three points and aligned with the original point along the surface normal.
 
+
+        if ((pt_1.DistanceTo(pt_1) < pt_2.DistanceTo(pt_2)) and (pt_1.DistanceTo(pt_1) < pt_3.DistanceTo(pt_3)) 
+        and (pt_1.DistanceTo(pt_1t) < pt_4.DistanceTo(pt_4))): # 1 smallest
+            line= rh.Line(pl_1.ClosestPoint(pt_1), pl_1.Normal)
+            point= line.PointAt(rh.Intersect.Intersection.LinePlane(line, pl_1) [1])
+            planar_poly = rh.PolylineCurve([point, pt_2, pt_3, pt_4, point])
+            
+        if pt_1.DistanceTo(pt_1t) > 0.01:
+            polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_1t, pt_1, pt_2]))
+            polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_1, pt_1t, pt_4]))
+        elif ((pt_2.DistanceTo(pt_2t) < pt_1.DistanceTo(pt_1t)) and (pt_2.DistanceTo(pt_2t) < pt_3.DistanceTo(pt_3t))
+        and (pt_2.DistanceTo(pt_2t) < pt_4.DistanceTo(pt_4t))): # 2 smallest
+            line = rh.Line(pl_2.ClosestPoint(pt_2), pl_2.Normal)
+            point= line.PointAt(rh.Intersect.Intersection.LinePlane(line, pl_2) [1])
+            planar_poly = rh.PolylineCurve([pt_1, point, pt_3, pt_4, pt_1])
+            
+        if pt_2.DistanceTo(pt_2t) > 0.01:
+            polys [-1] ["edge"].append(rh.PolylineCurve([pt_1, pt_2t, pt_2, pt_1]))
+            polys [-1] ["edge"].append(rh.PolylineCurve([pt_3, pt_2, pt_2t, pt_3]))
+        elif ((pt_3.DistanceTo(pt_3t) < pt_2.DistanceTo(pt_2t)) and (pt_3.DistanceTo(pt_3t) < pt_l.DistanceTo(pt_lt))
+        and (pt_3.DistanceTo(pt_3t) < pt_4.DistanceTo(pt_4t))): # 3 smallest
+            line= rh.Line(pl_3.ClosestPoint(pt_3), pl_3.Normal)
+            point= line.PointAt(rh.Intersect.Intersection.LinePlane(line, pl_3) [1])
+            planar_poly = rh.PolylineCurve([pt_1, pt_2, point, pt_4, pt_1])
+            
+        if pt_3.DistanceTo(pt_3t) > 0.01:
+            polys [-1] ["edge"].append(rh.PolylineCurve([pt_2, pt_3t, pt_3, pt_2]))
+            polys [-1] ["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_3t, pt_4]))
+        elif ((pt_4.DistanceTo(pt_4t) < pt_2.DistanceTo(pt_2t)) and (pt_4.DistanceTo(pt_4t) < pt_l.DistanceTo(pt_lt))
+        and (pt_4.DistanceTo(pt_4t) < pt_3.DistanceTo(pt_3t))): # 4 smallest
+            line= rh.Line(pl_4.ClosestPoint(pt_4), pl_4.Normal)
+            point= line.PointAt(rh.Intersect.Intersection.LinePlane(line, pl_4) [1])
+            planar_poly = rh.PolylineCurve([pt_1, pt_2, pt_3, point, pt_1])
+            
         t = rh.Transform.PlanarProjection(pl)
         pt_5.Transform(t)
 
