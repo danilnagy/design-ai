@@ -195,3 +195,22 @@ If you are not familiar with Github or typical git workflows such as branching, 
 Once you've forked the repo, [clone your fork](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop) to your computer using Github Desktop. This will create a copy of the repo's files on your computer so you can work with them.
 
 Finally, [edit this file](https://github.dev/danilnagy/design-ai/blob/gh-pages/docs/setup/index.md) and paste in your final script text as described above. Once you're done making edits, [create a commit](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/making-changes-in-a-branch/committing-and-reviewing-changes-to-your-project) of your changes. You should include a meaningful commit description describing the changes. Finally, [create a pull request](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/working-with-your-remote-repository-on-github-or-github-enterprise/creating-an-issue-or-pull-request#creating-a-pull-request) with the name specified above. This PR will be a record of your submission and will allow me to review your work.
+
+import Rhino.Geometry as rh
+
+points = []
+circles = []
+
+for x in range(x_num):
+    for y in range(y_num):
+        point = rh.Point3d(x * spacing, y * spacing, 0.0)
+        points.append(point)
+
+        
+        dist = point.DistanceTo(attractor)
+        if dist <= 5.0:
+            radius = dist /5.0
+        elif dist > 5.0:
+            radius = dist / 3.0
+        circle = rh.Circle(point, radius)
+        circles.append(circle)
