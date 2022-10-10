@@ -370,45 +370,74 @@ for u in range(u_num + 1):
 
 polys = []
 
-for i, row in enumerate(pts[:-1]):
-    for j, pt_1 in enumerate(row[:-1]):
 
-        polys.append({})
-
-        pt_2 = row[j+1]
-        next_row = pts[i+1]
-        pt_3 = next_row[j+1]
-        pt_4 = next_row[j]
-
+##challenges
+for i, row in enumerate(pts[:-1]): ## it returns all elements [:] except the last one -1
+    for j, pt_1 in enumerate(row[:-1]): ## enumerate gives us access to two variables for each loop, one that represents the index of an item in a list, and one that represents the item itself
+        
+        polys.append({}) ## add an empty dictionary to the list
+        
+        pt_2 = row[j + 1]
+        newt_row = pts[i + 1]
+        pt_3 = newt_row[j + 1]
+        pt_4 = newt_row[j]
+        
         poly = rh.PolylineCurve([pt_1, pt_2, pt_3, pt_4, pt_1])
-        polys[-1]["original"] = poly
-
-        ## CHALLENGE 1: here we always move the same point (pt_3). To solve this challenge, make a loop that iterates over every options of
-        ## corner point and tests how far each needs to move to be planar with the other three points. Then after the loops has run,
-        ## create the boundary polyline using the case with the least distance
-
-        pt_5 = rh.Point3d(pt_3)
-        pl = rh.Plane(pt_1, pt_2, pt_4)
-
-        ## CHALLENGE 2: here we are using a PlanarProjection to move the point to its closest location on the plane.
-        ## To move the point instead in the direction of the surface normal at that point, you can first use the srf.ClosestPoint() method to
-        ## find the U and V coordinates at the corner point and then the srf.NormalAt() method to get the normal vector at that location.
-        ## Finally, to find the location of the point you can create a line starting at the corner point and going in the direction of the
-        ## normal, and then intersect this line with the plane using rh.Intersect.Intersection.LinePlane() to get the point. By definition
-        ## this point will be planar with the other three points and aligned with the original point along the surface normal.
-
-        t = rh.Transform.PlanarProjection(pl)
-        pt_5.Transform(t)
-
-        planar_poly = rh.PolylineCurve([pt_1, pt_2, pt_5, pt_4, pt_1])
-        polys[-1]["planar"] = planar_poly
-
+        
+        polys[-1]["original"] = poly ## store original poly in the last dictionary with a key
+        
+        pt_1a = rh.Point3d(pt_1)
+        pt_2a = rh.Point3d(pt_2)
+        pt_3a = rh.Point3d(pt_3)
+        pt_4a = rh.Point3d(pt_4)
+        
+        pl_1 = rh.Plane(pt_2, pt_3, pt_4)
+        t_1 = rh.Transform.PlanarProjection(pl_1) ## making sure we get flat panels
+        pt_1a.Transform(t_1)       
+        
+        pl_2 = rh.Plane(pt_1, pt_3, pt_4)
+        t_2 = rh.Transform.PlanarProjection(pl_2) ## making sure we get flat panels
+        pt_2a.Transform(t_2)  
+        
+        pl_3 = rh.Plane(pt_1, pt_2, pt_4)
+        t_3 = rh.Transform.PlanarProjection(pl_3) ## making sure we get flat panels
+        pt_3a.Transform(t_3)
+        
+        pl_4 = rh.Plane(pt_1, pt_2, pt_3)
+        t_4 = rh.Transform.PlanarProjection(pl_4) ## making sure we get flat panels
+        pt_4a.Transform(t_4)
+        
+        polys[-1]["planar"] = []
         polys[-1]["edge"] = []
-        if pt_3.DistanceTo(pt_5) > 0.01:
-            polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_5, pt_3, pt_2]))
-            polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_5, pt_4]))
+        if pt_1.DistanceTo(pt_1a) > pt_2.DistanceTo(pt_2a) and pt_1.DistanceTo(pt_1a) > pt_3.DistanceTo(pt_3a) and pt_1.DistanceTo(pt_1a) > pt_4.DistanceTo(pt_4a):
+            polys[-1]["planar"].append(rh.PolylineCurve([pt_1a, pt_2, pt_3, pt_4, pt_1a]))
+            if pt_1.DistanceTo(pt_1a) > 0.01:
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_1, pt_1a, pt_2, pt_1]))
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_1, pt_1a, pt_4, pt_1]))
+
+        if pt_2.DistanceTo(pt_2a) > pt_1.DistanceTo(pt_1a) and pt_2.DistanceTo(pt_2a) > pt_3.DistanceTo(pt_3a) and pt_2.DistanceTo(pt_2a) > pt_4.DistanceTo(pt_4a):
+            polys[-1]["planar"].append(rh.PolylineCurve([pt_1, pt_2a, pt_3, pt_4, pt_1]))
+            if pt_2.DistanceTo(pt_2a) > 0.01:
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_2a, pt_3, pt_2]))
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_2a, pt_1, pt_2]))
+
+        if pt_3.DistanceTo(pt_3a) > pt_1.DistanceTo(pt_1a) and pt_3.DistanceTo(pt_3a) > pt_2.DistanceTo(pt_2a) and pt_3.DistanceTo(pt_3a) > pt_4.DistanceTo(pt_4a):
+            polys[-1]["planar"].append(rh.PolylineCurve([pt_1, pt_2, pt_3a, pt_4, pt_1]))
+            if pt_3.DistanceTo(pt_3a) > 0.01:
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_3a, pt_3, pt_2]))
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_3a, pt_4]))
+
+
+        if pt_4.DistanceTo(pt_4a) > pt_1.DistanceTo(pt_1a) and pt_4.DistanceTo(pt_4a) > pt_2.DistanceTo(pt_2a) and pt_4.DistanceTo(pt_4a) > pt_3.DistanceTo(pt_3a):
+            polys[-1]["planar"].append(rh.PolylineCurve([pt_1, pt_2, pt_3, pt_4a, pt_1]))
+            if pt_4.DistanceTo(pt_4a) > 0.01:
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_4a, pt_3, pt_4]))
+                polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_4a, pt_1, pt_4]))
+
+#        if pt_3.DistanceTo(pt_3a) > 0.01:
+#            polys[-1]["edge"].append(rh.PolylineCurve([pt_2, pt_3a, pt_3, pt_2]))
+#            polys[-1]["edge"].append(rh.PolylineCurve([pt_4, pt_3, pt_3a, pt_4]))
 
 original = [poly["original"] for poly in polys]
 planar = [poly["planar"] for poly in polys]
 edge = [poly["edge"] for poly in polys]
-```
