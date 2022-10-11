@@ -16,7 +16,7 @@ These _recursive_ calls to the same function create a kind of spiral behavior de
 
 ### Coding recursive functions in Python
 
-The concept of recursion is incredibly powerful, and there are many useful application for recursion in computer programming. At the same time, the nested behavior of recursive functions can be difficult for people to understand intuitively, which is why recursion tends to be a difficult subject for people just starting out in programming. To start to gain an intuition for how recursive functions work, let's create a simple example of a recursive function that can add a sequence of numbers up to a certain value. We won't be using any geometry yet, but you can try this code directly in a `Python` component in Grasshopper.
+The concept of recursion is incredibly powerful, and there are many useful application for recursion in computer programming. At the same time, the nested behavior of recursive functions can be difficult for people to understand intuitively, which is why recursion tends to be a difficult subject for people just starting out in programming. To start to gain an intuition for how recursive functions work, let's create a simple example of a recursive function that can add a sequence of numbers up to a certain value. We won't be using any geometry yet, but you can try this code directly in a `Python` component in Grasshopper:
 
 ```python
 def addRecursively(value):
@@ -46,9 +46,14 @@ addRecursively(3) --> 3 + _
 	3 + 3 --> 6
 ```
 
-You can see how this forms a nested set of calls to the same function, with each function waiting for its child function to return its value before generating its own return.
+You can see how this forms a nested set of calls to the same function, with each function waiting for its child function to return its value before generating its own return. You can also see that, since we are always subtracting one from the value before calling the function recursively, it is guaranteed that the value will eventually reach 0, no matter how large of a value we start with.
 
-What if we want to add an arbitrary list of numbers instead of a sequence of numbers? To do this we can create a variation of our `addRecursively()` function which takes in a list of numbers and operates on them one by one:
+{: .note }
+While this logic should work for all positive integers (what we could call the "happy case"), we should also make sure it would work with other possible inputs the user might provide, for example negative or decimal numbers. For an extra challenge you could test running the function with different types of inputs and modify the termination criteria as needed to ensure the recursive calls will still eventually exit.
+
+### Recursing over a list
+
+Let's modify our recursion script to sum an arbitrary list of numbers. To do this we can modify the `addRecursively()` function to take in a list of numbers and operate on them one by one:
 
 ```python
 def addRecursively(values):
