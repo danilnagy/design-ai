@@ -205,8 +205,12 @@ def grow(pts, params): ## input to the grow() function is now a list of points
     else:
         return lines
 
-a = grow([rh.Point3d(0,0,0)], [1,2,2,1]) ## passing the starting point as the single item in a new list
+branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as the single item in a new list
 ```
+
+| Final files from this tutorial |
+| :----------------------------- |
+| [2_end.gh](data/2_end.gh)      |
 
 ![](images/2_03.png)
 
@@ -214,14 +218,56 @@ a = grow([rh.Point3d(0,0,0)], [1,2,2,1]) ## passing the starting point as the si
 
 > Challenge 1
 >
-> Download this [Grasshopper file](data/2_end.gh) which contains the queue-based version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 35 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
+> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the queue-based version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
 >
 > ![](images/2_04.png)
 
-Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`). The code below contains some hints to consider as you implement your solution.
+Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
 
 ```python
+import Rhino.Geometry as rh
 
+def grow(pts, params):
+
+    if len(params) <= 0:
+        return []
+
+    param = params.pop(0)
+    start_pt = pts.pop(0)
+
+    lines = []
+
+    if param == 1:
+        new_pt = rh.Point3d(start_pt)
+        new_pt.Transform(rh.Transform.Translation(0,0,1))
+        lines.append(rh.Line(start_pt, new_pt))
+        pts.append(new_pt)
+
+        return lines + grow(pts, params)
+
+    elif param == 2:
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(0,1,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
+
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+
+        return lines + grow(pts, params)
+
+    elif param == 3:
+
+        ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
+
+        return lines
+
+    else:
+        return lines
+
+branches = grow([rh.Point3d(0,0,0)], params)
 ```
 
 ## Subdivision tutorial
