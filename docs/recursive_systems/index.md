@@ -208,11 +208,11 @@ def grow(pts, params): ## input to the grow() function is now a list of points
 branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as the single item in a new list
 ```
 
+![](images/2_03.png)
+
 | Final files from this tutorial |
 | :----------------------------- |
 | [2_end.gh](data/2_end.gh)      |
-
-![](images/2_03.png)
 
 {: .challenge-title }
 
