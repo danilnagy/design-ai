@@ -164,11 +164,38 @@ For our parameter set of [1,2,0], the first call to `grow()` generates one verti
 
 ### Stack vs. Queue
 
-You may have noticed when testing
+You may have noticed when testing the branching model with different inputs that the trees tend to be rather lopsided. If you analyze what's going on, you will notice that every time the tree branches, the first branch is used for further branches, causing the tree to lean in the direction of the first branch. This is due to the way we built our algorithm, specifically the part that creates to branches. After we create the new points on lines 20 and 24, we immediately use them to make two recursive calls to the `grow()` function. Because we execute these two calls sequentially, the first one takes precedent, _as well as all the further calls to `grow()` made by it_. This means that the last branch created always takes priority for generating the next branches, which results in rather tall but lop-sided trees.
 
-depth-first
+We refer to this kind of an approach as _depth-first_, meaning deeper branches are explored first before closer ones. This concept also appears in other areas of computer science including [search](). In programming, we can apply a depth-first approach using a data structure known as a **stack**. A stack is a list to which elements are added to the front, as well as taken from the front. This means that the item taken from the stack is always the _most recent_ item added to it. You can think of this as a stack of books, where if you wanted to read a book you would have to take the one on the top, which was the most recently added. This kind of structure is also referred to as "last in, first out".
 
-Here is a queue-based version of the same branching code, which makes the branching behave in a more intuitive way:
+Here is a basic implementation of a stack in Python:
+
+```python
+my_list = [] 		# create empty list
+
+# stack
+my_list.append(“item”)	# add item to end of list
+my_list.pop()		# take item from end of list. This is the default behavior of the .pop() method
+```
+
+A **queue**, on the other hand, adds elements to the end of a list, while still taking them from the front. This means that the item taken from the queue is always the _oldest_ item added to it. THis is similar to a queue of people lining up to buy tickets. The next person who gets to buy a ticket should be the person who joined the line earliest. A queue can be used to implement a _breadth-first_ approach, where branches are explored in order, generating a shallower but wider tree. This kind of structure is also referred to as "first in, first out".
+
+Here is a basic implementation of a queue in Python:
+
+```python
+my_list = [] 		# create empty list
+
+# queue
+my_list.append(“item”)	# add item to end of list
+my_list.pop(0)		# take item from start of list. We pass 0 into the .pop() method to pop the first item in the list
+```
+
+{: .note }
+Notice that both stacks and queues can be represented using a list in Python. The only difference is which direction we take the item from.
+
+Event though we are not using lists in our current implementation of the `grow()` function, the way we are executing subsequent calls to the function with the most recently generated points creates a similar depth-first behavior. To change this to a breadth-first approach where the earliest generated points are used to grow subsequent branches, we can modify our algorithm to store a list of generated points in a queue, with each generated point added to the end of the queue, and each subsequent call to the `grow()` function taking the oldest point from the front of the list.
+
+Here is a breadth-first version of the same branching code, which makes the branching behave in a more intuitive way:
 
 ```python
 import Rhino.Geometry as rh
@@ -223,7 +250,7 @@ branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as th
 
 > Challenge 1
 >
-> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the queue-based version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
+> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the breadth-first version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
 >
 > ![](images/2_04.png)
 
