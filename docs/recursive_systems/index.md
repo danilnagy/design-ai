@@ -257,8 +257,8 @@ branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as th
 Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
 
 ```python
-## 2-jz3545
-import Rhino.Geometry as rh
+
+iimport Rhino.Geometry as rh
 
 def grow(pts, params):
     
@@ -275,7 +275,6 @@ def grow(pts, params):
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
         pts.append(new_pt)
-        
         return lines + grow(pts, params)
     
     elif param == 2:
@@ -288,7 +287,6 @@ def grow(pts, params):
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-        
         return lines + grow(pts, params)
     
     elif param == 3:
@@ -301,7 +299,6 @@ def grow(pts, params):
         new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-        
         return lines + grow(pts, params)
     
     else:
