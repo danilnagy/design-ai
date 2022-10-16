@@ -257,55 +257,7 @@ branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as th
 Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
 
 ```python
-import Rhino.Geometry as rh
 
-def grow(pts, params):
-    
-    if len(params) <= 0:
-        return []
-    
-    param = params.pop(0)
-    start_pt = pts.pop(0)
-    
-    lines = []
-    
-    if param == 1:
-        new_pt = rh.Point3d(start_pt)
-        new_pt.Transform(rh.Transform.Translation(0,0,1))
-        lines.append(rh.Line(start_pt, new_pt))
-        pts.append(new_pt)
-        
-        return lines + grow(pts, params)
-    
-    elif param == 2:
-        new_pt_1 = rh.Point3d(start_pt)
-        new_pt_1.Transform(rh.Transform.Translation(0,1,1))
-        lines.append(rh.Line(start_pt, new_pt_1))
-        pts.append(new_pt_1)
-        
-        new_pt_2 = rh.Point3d(start_pt)
-        new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
-        lines.append(rh.Line(start_pt, new_pt_2))
-        pts.append(new_pt_2)
-        
-        return lines + grow(pts, params)
-    
-    elif param == 3:
-        new_pt_1 = rh.Point3d(start_pt)
-        new_pt_1.Transform(rh.Transform.Translation(1,0,1))
-        lines.append(rh.Line(start_pt, new_pt_1))
-        pts.append(new_pt_1)
-        
-        new_pt_2 = rh.Point3d(start_pt)
-        new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
-        lines.append(rh.Line(start_pt, new_pt_2))
-        pts.append(new_pt_2)
-        return lines + grow(pts, params)
-    
-    else:
-        return lines
-
-branches = grow([rh.Point3d(0,0,0)], params)
 ```
 
 ## Subdivision tutorial
