@@ -16,7 +16,7 @@ These _recursive_ calls to the same function create a kind of spiral behavior de
 
 ### Coding recursive functions in Python
 
-The concept of recursion is incredibly powerful, and there are many useful application for recursion in computer programming. At the same time, the nested behavior of recursive functions can be difficult for people to understand intuitively, which is why recursion tends to be a difficult subject for people just starting out in programming. To start to gain an intuition for how recursive functions work, let's create a simple example of a recursive function that can add a sequence of numbers up to a certain value. We won't be using any geometry yet, but you can try this code directly in a `Python` component in Grasshopper.
+The concept of recursion is incredibly powerful, and there are many useful application for recursion in computer programming. At the same time, the nested behavior of recursive functions can be difficult for people to understand intuitively, which is why recursion tends to be a difficult subject for people just starting out in programming. To start to gain an intuition for how recursive functions work, let's create a simple example of a recursive function that can add a sequence of numbers up to a certain value. We won't be using any geometry yet, but you can try this code directly in a `Python` component in Grasshopper:
 
 ```python
 def addRecursively(value):
@@ -46,9 +46,14 @@ addRecursively(3) --> 3 + _
 	3 + 3 --> 6
 ```
 
-You can see how this forms a nested set of calls to the same function, with each function waiting for its child function to return its value before generating its own return.
+You can see how this forms a nested set of calls to the same function, with each function waiting for its child function to return its value before generating its own return. You can also see that, since we are always subtracting one from the value before calling the function recursively, it is guaranteed that the value will eventually reach 0, no matter how large of a value we start with.
 
-What if we want to add an arbitrary list of numbers instead of a sequence of numbers? To do this we can create a variation of our `addRecursively()` function which takes in a list of numbers and operates on them one by one:
+{: .note }
+While this logic should work for all positive integers (what we could call the "happy case"), we should also make sure it would work with other possible inputs the user might provide, for example negative or decimal numbers. For an extra challenge you could test running the function with different types of inputs and modify the termination criteria as needed to ensure the recursive calls will still eventually exit.
+
+### Recursing over a list
+
+Let's modify our recursion script to sum an arbitrary list of numbers. To do this we can modify the `addRecursively()` function to take in a list of numbers and operate on them one by one:
 
 ```python
 def addRecursively(values):
@@ -159,11 +164,38 @@ For our parameter set of [1,2,0], the first call to `grow()` generates one verti
 
 ### Stack vs. Queue
 
-You may have noticed when testing
+You may have noticed when testing the branching model with different inputs that the trees tend to be rather lopsided. If you analyze what's going on, you will notice that every time the tree branches, the first branch is used for further branches, causing the tree to lean in the direction of the first branch. This is due to the way we built our algorithm, specifically the part that creates to branches. After we create the new points on lines 20 and 24, we immediately use them to make two recursive calls to the `grow()` function. Because we execute these two calls sequentially, the first one takes precedent, _as well as all the further calls to `grow()` made by it_. This means that the last branch created always takes priority for generating the next branches, which results in rather tall but lop-sided trees.
 
-depth-first
+We refer to this kind of an approach as _depth-first_, meaning deeper branches are explored first before closer ones. This concept also appears in other areas of computer science including [search](). In programming, we can apply a depth-first approach using a data structure known as a **stack**. A stack is a list to which elements are added to the front, as well as taken from the front. This means that the item taken from the stack is always the _most recent_ item added to it. You can think of this as a stack of books, where if you wanted to read a book you would have to take the one on the top, which was the most recently added. This kind of structure is also referred to as "last in, first out".
 
-Here is a queue-based version of the same branching code, which makes the branching behave in a more intuitive way:
+Here is a basic implementation of a stack in Python:
+
+```python
+my_list = [] 		# create empty list
+
+# stack
+my_list.append(“item”)	# add item to end of list
+my_list.pop()		# take item from end of list. This is the default behavior of the .pop() method
+```
+
+A **queue**, on the other hand, adds elements to the end of a list, while still taking them from the front. This means that the item taken from the queue is always the _oldest_ item added to it. THis is similar to a queue of people lining up to buy tickets. The next person who gets to buy a ticket should be the person who joined the line earliest. A queue can be used to implement a _breadth-first_ approach, where branches are explored in order, generating a shallower but wider tree. This kind of structure is also referred to as "first in, first out".
+
+Here is a basic implementation of a queue in Python:
+
+```python
+my_list = [] 		# create empty list
+
+# queue
+my_list.append(“item”)	# add item to end of list
+my_list.pop(0)		# take item from start of list. We pass 0 into the .pop() method to pop the first item in the list
+```
+
+{: .note }
+Notice that both stacks and queues can be represented using a list in Python. The only difference is which direction we take the item from.
+
+Event though we are not using lists in our current implementation of the `grow()` function, the way we are executing subsequent calls to the function with the most recently generated points creates a similar depth-first behavior. To change this to a breadth-first approach where the earliest generated points are used to grow subsequent branches, we can modify our algorithm to store a list of generated points in a queue, with each generated point added to the end of the queue, and each subsequent call to the `grow()` function taking the oldest point from the front of the list.
+
+Here is a breadth-first version of the same branching code, which makes the branching behave in a more intuitive way:
 
 ```python
 import Rhino.Geometry as rh
@@ -208,63 +240,68 @@ def grow(pts, params): ## input to the grow() function is now a list of points
 branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as the single item in a new list
 ```
 
+![](images/2_03.png)
+
 | Final files from this tutorial |
 | :----------------------------- |
 | [2_end.gh](data/2_end.gh)      |
-
-![](images/2_03.png)
 
 {: .challenge-title }
 
 > Challenge 1
 >
-> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the queue-based version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
+> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the breadth-first version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
 >
 > ![](images/2_04.png)
 
 Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
 
 ```python
-## 2-jz3545
 import Rhino.Geometry as rh
 
 def grow(pts, params):
-
+    
     if len(params) <= 0:
         return []
-
+    
     param = params.pop(0)
     start_pt = pts.pop(0)
-
+    
     lines = []
-
+    
     if param == 1:
         new_pt = rh.Point3d(start_pt)
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
         pts.append(new_pt)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 2:
         new_pt_1 = rh.Point3d(start_pt)
         new_pt_1.Transform(rh.Transform.Translation(0,1,1))
         lines.append(rh.Line(start_pt, new_pt_1))
         pts.append(new_pt_1)
-
+        
         new_pt_2 = rh.Point3d(start_pt)
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 3:
-
-        ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
-
-        return lines
-
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
+        
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+        return lines + grow(pts, params)
+    
     else:
         return lines
 
@@ -274,3 +311,4 @@ branches = grow([rh.Point3d(0,0,0)], params)
 ## Subdivision tutorial
 
 The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. In the next part of the tutorial we will use the same logic to create an algorithm to subdivide a space into multiple spaces.
+##updated
