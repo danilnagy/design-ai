@@ -309,11 +309,17 @@ branches = grow([rh.Point3d(0,0,0)], params)
 | [2_subd.3dm](data/2_subd.3dm)         |
 | [2_subd.gh](data/2_subd.gh)           |
 
-The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. This exercise uses a similar recursive approach to divide a space into several smaller spaces.
+The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. This exercise uses a similar recursive approach to divide a space into several smaller spaces. Download the Rhino and Grasshopper files above and you should see something similar to this:
 
 ![](images/2_05.gif)
 
-Download the Rhino and Grasshopper files above. In the `Python` component you will find the following script which implements the functions needed for the recursive subdivision process.
+The Grasshopper file specifies the inputs needed by the Python script and connects them to inputs on the `Python` component. The inputs are:
+
+- <u>boundary</u> - A closed curve that represents the boundary of the space to be divided.
+- <u>dirs</u> - A set of parameters either 0 or 1 `[0,1]` that define the direction of each split. The number of parameter sets the number of times the split occurs, and the number of spaces resulting will always be one more than the number of splits.
+- <u>params</u> - A set of parameters between 0 and 1 `[0-1]` that define the relative position of the splitting line for each division.
+
+Inside the `Python` component you will find the following script which implements the recursive subdivision process based on the inputs provided:
 
 ```python
 import Rhino.Geometry as rh
@@ -455,3 +461,9 @@ def split_recursively(curves, dirs, params):
 # this starts the recursion process with all the parameters and a single curve in the input list
 curves = split_recursively([boundary], dirs, params)
 ```
+
+{: .challenge-title }
+
+> Challenge 2
+>
+> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the breadth-first version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
