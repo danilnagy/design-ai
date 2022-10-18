@@ -309,7 +309,11 @@ branches = grow([rh.Point3d(0,0,0)], params)
 | [2_subd.3dm](data/2_subd.3dm)         |
 | [2_subd.gh](data/2_subd.gh)           |
 
-The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. In the next part of the tutorial we will use the same logic to create an algorithm to subdivide a space into multiple spaces.
+The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. This exercise uses a similar recursive approach to divide a space into several smaller spaces.
+
+![](images/2_05.gif)
+
+Download the Rhino and Grasshopper files above. In the `Python` component you will find the following script which implements the functions needed for the recursive subdivision process.
 
 ```python
 import Rhino.Geometry as rh
