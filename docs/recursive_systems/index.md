@@ -316,8 +316,8 @@ The previous example shows the power of recursive functions in defining complex 
 The Grasshopper file specifies the inputs needed by the Python script and connects them to inputs on the `Python` component. The inputs are:
 
 - <u>boundary</u> - A closed curve that represents the boundary of the space to be divided.
-- <u>dirs</u> - A set of parameters either 0 or 1 `[0,1]` that define the direction of each split. The number of parameter sets the number of times the split occurs, and the number of spaces resulting will always be one more than the number of splits.
-- <u>params</u> - A set of parameters between 0 and 1 `[0-1]` that define the relative position of the splitting line for each division.
+- <u>dirs</u> - A set of parameters either 0 or 1 `[0,1]` that define the direction of each split. The number of parameter sets the number of times the split occurs, and the number of spaces resulting will always be one more than the number of splits. To specify the parameters we use a `Gene Pool` component which bundles up a set of sliders of the same type to make it easier to specify a long list of parameters. For this parameter set, since we are looking for integers either 0 or 1, we set the range of the sliders to 0.00 to 1.99 and round the result down. This ensures an even distribution of both parameter values and works better than integer sliders.
+- <u>params</u> - A set of parameters between 0 and 1 `[0-1]` that define the relative position of the splitting line for each division. The number of parameters defined here should match the number defined for <u>dirs</u>.
 
 Inside the `Python` component you will find the following script which implements the recursive subdivision process based on the inputs provided:
 
@@ -466,4 +466,4 @@ curves = split_recursively([boundary], dirs, params)
 
 > Challenge 2
 >
-> Download this [Grasshopper file](data/2_challenge_start.gh) which contains the breadth-first version of the branching code. Can you add additional code within the queue-based Python script to define a new branching behavior for the `3` parameter that creates the branching seen in the screenshot below. You should only add code within the `elif param == 3:` code block starting on line 36 of the Python script. You should not need to modify anything else about the code, the Grasshopper definition, or the set of parameters.
+> Implement angled walls
