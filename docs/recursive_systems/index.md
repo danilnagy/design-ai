@@ -304,10 +304,11 @@ branches = grow([rh.Point3d(0,0,0)], params)
 
 ## Subdivision tutorial
 
-| Files you will need for this tutorial |
-| :------------------------------------ |
-| [2_subd.3dm](data/2_subd.3dm)         |
-| [2_subd.gh](data/2_subd.gh)           |
+| Files you will need for this tutorial   |
+| :-------------------------------------- |
+| [2_subd.3dm](data/2_subd.3dm)           |
+| [2_subd_start.gh](data/2_subd_start.gh) |
+| [2_subd_end.gh](data/2_subd_end.gh)     |
 
 The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. This exercise uses a similar recursive approach to divide a space into several smaller spaces. Download the Rhino and Grasshopper files above and you should see something similar to this:
 
@@ -319,7 +320,12 @@ The Grasshopper file specifies the inputs needed by the Python script and connec
 - <u>dirs</u> - A set of parameters either 0 or 1 `[0,1]` that define the direction of each split. The number of parameter sets the number of times the split occurs, and the number of spaces resulting will always be one more than the number of splits. To specify the parameters we use a `Gene Pool` component which bundles up a set of sliders of the same type to make it easier to specify a long list of parameters. For this parameter set, since we are looking for integers either 0 or 1, we set the range of the sliders to 0.00 to 1.99 and round the result down. This ensures an even distribution of both parameter values and works better than integer sliders.
 - <u>params</u> - A set of parameters between 0 and 1 `[0-1]` that define the relative position of the splitting line for each division. The number of parameters defined here should match the number defined for <u>dirs</u>.
 
-Inside the `Python` component you will find the following script which implements the recursive subdivision process based on the inputs provided:
+Inside the `Python` script you will find two functions already defined:
+
+- `split_curve()` - Splits a curve with another curve. This combines RhinoCommon's Intersect and Split functions into one step and also handles a special case for non-convex boundaries.
+- `split_space()` - For splitting a closed curve defining the boundary of a space into two closed curves based on two parameters, one which determines the direction of the split (horizontal or vertical) and one that determines the position of the split. This function utilizes the `split_curves()` function inside of it.
+
+Currently, the boundaries are directly output to the curves output. What we need to do is write another function called `split_recursively` which calls the `split_space()` function recursively to progressively subdivide the input space into a set of smaller spaces. Then we can call this function with our initial boundaries and parameter sets to perform the subdivision. Here is the final script once the function is implemented:
 
 ```python
 import Rhino.Geometry as rh
@@ -466,4 +472,8 @@ curves = split_recursively([boundary], dirs, params)
 
 > Challenge 2
 >
-> Implement angled walls
+> Our subdivision script is nice but it is quite constrained because it can only split the space either horizontally or vertically. Can you change the functionality of the `split_space()` function to split the space on an arbitrary angle instead of choosing one of two directions?
+>
+> HINT: You can use [this file](data/2_subd_challenge.gh) as a starting point, which changes the dir input from a binary [0,1] to a continuous range [0-1]. In the script, you can map this range to a full rotation by multiplying it by `360` (if you want to use degrees) or `2*pi` if you want to use radians. Then you can use this rotation parameter to rotate the split line which divides the space.
+
+Once you're done implementing the challenges, paste your final code into the code block above and create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
