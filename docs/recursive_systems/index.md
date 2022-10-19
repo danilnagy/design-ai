@@ -312,4 +312,3 @@ branches = grow([rh.Point3d(0,0,0)], params)
 ## Subdivision tutorial
 
 The previous example shows the power of recursive functions in defining complex forms based on a small set of abstract parameters. However, the use of recursion is not restricted only to branching problems. In fact any system can be implemented using recursive functions as long as it can be described based on smaller versions of itself. In the next part of the tutorial we will use the same logic to create an algorithm to subdivide a space into multiple spaces.
-##updated
