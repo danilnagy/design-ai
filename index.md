@@ -19,13 +19,3 @@ While computer software is now integrated into almost every design practice, act
 The good news is we don’t have to start from scratch, and you don’t necessarily need to be able to build your own CAD software like Revit or Rhino to start developing custom tools and workflows. Most CAD software today supports developing custom features and extensions through plugins and scripting interfaces. This allows us to get up to speed very quickly while the opportunities ahead are vast.
 
 This course is structured around several hands-on exercises that will demonstrate a variety of computational approaches and strategies for solving design problems through code. The class will focus on building real applications, while covering enough theory and case studies to ground the work we will be doing and expose some of the larger possibilities.
-
-## Tech stack
-
-The class will use several tools:
-
-- [Rhino3d](https://www.rhino3d.com/) - great all-purpose 3d modelling software with great support for developing custom extensions through code
-- [Grasshopper](http://grasshopper3d.com/) - Rhino’s visual programming environment which gives us programmatic access to Rhino’s geometry library and allows us to create automations by linking together visual building blocks representing different geometric commands
-- [Python](https://www.python.org/) - a general-purpose programming language that can be use within Grasshopper to gain more control over our programming logic, thereby extending Grasshopper’s capabilities and allowing us to build custom tools
-
-The class assumes a working knowledge of Rhino and Grasshopper, and a basic familiarity with at least one programming language (preferably Python).
