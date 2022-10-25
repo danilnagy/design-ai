@@ -480,6 +480,7 @@ def split_recursively(curves, dirs, params):
 # this starts the recursion process with all the parameters and a single curve in the input list
 curves = split_recursively([boundary], dirs, params)
 ```
+hi
 
 
 {: .challenge-title }
