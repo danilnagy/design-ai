@@ -257,6 +257,7 @@ branches = grow([rh.Point3d(0,0,0)], params) ## passing the starting point as th
 Once you're done implementing this challenge, paste your final code below. Once you've finished all changes on this page, create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
 
 ```python
+
 import Rhino.Geometry as rh
 
 def grow(pts, params):
@@ -292,14 +293,24 @@ def grow(pts, params):
 
     elif param == 3:
 
-        ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
 
-        return lines
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+
+        return lines + grow(pts, params)
 
     else:
         return lines
 
 branches = grow([rh.Point3d(0,0,0)], params)
+
+
 ```
 
 ## Subdivision tutorial
@@ -330,6 +341,9 @@ Currently, the boundaries are directly output to the curves output. What we need
 ```python
 import Rhino.Geometry as rh
 from scriptcontext import doc
+import math
+import rhinoscriptsyntax as rs
+
 
 # get absolute and angle tolerances from document
 abs_tol = doc.ModelAbsoluteTolerance
@@ -437,6 +451,13 @@ def split_space(curve, dir, param):
     # create the split line and convert it to a Nurbs Curve
     # (this is necessary to make the splitting work in the next function)
     split_line = rh.Line(new_pt_1, new_pt_2).ToNurbsCurve()
+    
+    #challenge2
+    split_line_length = rh.Line(new_pt_1, new_pt_2).Length
+    split_line_center = rh.Line(new_pt_1, new_pt_2).PointAtLength(split_line_length/2)
+    rotation = math.pi * rad
+    split_line.Transform(rh.Transform.Rotation(rotation,split_line_center))
+
 
     # use the split_curve() function to split the boundary with the split line
     parts = split_curve(curve, split_line, True)
