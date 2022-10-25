@@ -260,42 +260,56 @@ Once you're done implementing this challenge, paste your final code below. Once 
 import Rhino.Geometry as rh
 
 def grow(pts, params):
-
+    
     if len(params) <= 0:
         return []
-
+    
     param = params.pop(0)
     start_pt = pts.pop(0)
-
+    
     lines = []
-
+    
     if param == 1:
         new_pt = rh.Point3d(start_pt)
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
         pts.append(new_pt)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 2:
         new_pt_1 = rh.Point3d(start_pt)
         new_pt_1.Transform(rh.Transform.Translation(0,1,1))
         lines.append(rh.Line(start_pt, new_pt_1))
         pts.append(new_pt_1)
-
+        
         new_pt_2 = rh.Point3d(start_pt)
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 3:
-
+        
+        new_pt_3 = rh.Point3d(start_pt)
+        new_pt_3.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_3))
+        pts.append(new_pt_3)
+        
+        new_pt_4 = rh.Point3d(start_pt)
+        new_pt_4.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_4))
+        pts.append(new_pt_4)
+        
+        
+        return lines + grow(pts, params)
+        
+        
         ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
-
+        
         return lines
-
+    
     else:
         return lines
 
@@ -344,9 +358,9 @@ def split_curve(c1, c2, close):
     # this code uses a "list comprehension" which is a shortcut for iterating over a list in Python
     # this single line does the same thing as:
 
-    # p = []
-    # for i in range(inter.Count):
-        # p.append(inter[i].ParameterA)
+    p = []
+        for i in range(inter.Count):
+        p.append(inter[i].ParameterA)
 
     p = [inter[i].ParameterA for i in range(inter.Count)]
 
