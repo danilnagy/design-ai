@@ -260,42 +260,49 @@ Once you're done implementing this challenge, paste your final code below. Once 
 import Rhino.Geometry as rh
 
 def grow(pts, params):
-
+    
     if len(params) <= 0:
         return []
-
+    
     param = params.pop(0)
     start_pt = pts.pop(0)
-
+    
     lines = []
-
+    
     if param == 1:
         new_pt = rh.Point3d(start_pt)
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
         pts.append(new_pt)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 2:
         new_pt_1 = rh.Point3d(start_pt)
         new_pt_1.Transform(rh.Transform.Translation(0,1,1))
         lines.append(rh.Line(start_pt, new_pt_1))
         pts.append(new_pt_1)
-
+        
         new_pt_2 = rh.Point3d(start_pt)
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 3:
-
-        ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
-
-        return lines
-
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
+        
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+        
+        return lines + grow(pts, params)
+    
     else:
         return lines
 
@@ -471,7 +478,158 @@ curves = split_recursively([boundary], dirs, params)
 {: .challenge-title }
 
 > Challenge 2
->
+```python
+import Rhino.Geometry as rh
+import math
+from scriptcontext import doc
+
+# get absolute and angle tolerances from document
+abs_tol = doc.ModelAbsoluteTolerance
+ang_tol = doc.ModelAngleToleranceRadians
+
+# this function splits a curve c1 with another curve c2
+def split_curve(c1, c2, close):
+    # get intersection events between two curves
+    inter = rh.Intersect.Intersection.CurveCurve(c1, c2, abs_tol, abs_tol)
+    
+    # get parameters on first curve from all intersection events
+    # this code uses a "list comprehension" which is a shortcut for iterating over a list in Python
+    # this single line does the same thing as:
+    
+    # p = []
+    # for i in range(inter.Count):
+        # p.append(inter[i].ParameterA)
+    
+    p = [inter[i].ParameterA for i in range(inter.Count)]
+    
+    # handle multiple intersections (for non-convex boundaries)
+    
+    # if more than two parameters are returned, it means that the boundary shape is non-convex
+    # and was split by the split line into more than two pieces
+    # since we only want two pieces, we must find two consecutive parameters 
+    # which split the boundary into only two separate pieces
+    
+    if len(p) > 2:
+        
+        # loop over all parameters
+        for i in range(len(p)):
+            
+            # get the points at the previous and current parameters in the list
+            pt1 = c1.PointAt(p[i-1])
+            pt2 = c1.PointAt(p[i])
+            
+            # get the line between the two points
+            l = rh.Line(pt1, pt2).ToNurbsCurve()
+            
+            # check how many times the line intersects the boundary
+            inter = rh.Intersect.Intersection.CurveCurve(c1, l.ToNurbsCurve(), abs_tol, abs_tol)
+            
+            # if there are only two intersections, return the two parameters 
+            # and break out of loop
+            if len(inter) == 2:
+                p = [p[i-1], p[i]]
+                break
+    
+    # split the curve by the parameters
+    pieces = c1.Split(p)
+    
+    # create a new list to store the final curves
+    curves = []
+    
+    # iterate over pieces
+    for piece in pieces:
+        # if closed curves were requested and the curve is not closed
+        if close == True and not piece.IsClosed:
+            # create a new line to close the curve, join them together, and add the result to curves list
+            line = rh.Line(piece.PointAtStart, piece.PointAtEnd).ToNurbsCurve()
+            curves += rh.NurbsCurve.JoinCurves([piece, line])
+        else:
+            # otherwise add the original piece to the curves list
+            curves.append(piece)
+    
+    # return the final curves
+    return curves
+
+# this function splits a space with two parameters
+def split_space(curve, dir, param):
+    intdir = 0
+    if dir >= 0.5:
+        intdir = 1
+    else:
+        intdir = 0
+    # get the bounding box of the curve
+    bb = curve.GetBoundingBox(True)
+    # get the base point of the bounding box
+    base_pt = rh.Point3d(bb.Min.X, bb.Min.Y, 0.0)
+    
+    # get the x and y dimensions of the bounding box
+    x = bb.Max.X - bb.Min.X
+    y = bb.Max.Y - bb.Min.Y
+    
+    # create a list of the x,y dimensions and x,y unit vectors
+    dims = [x,y]
+    direction = math.radians(dir * 360)
+    cosx = math.cos(direction)
+    sinx = math.sqrt(1 - math.pow(cosx,2))
+    print(math.pow(sinx,2)+math.pow(cosx,2))
+    vecs = [rh.Vector3d(1,0,0), rh.Vector3d(cosx,sinx,0)]
+    
+    # create a vector to position the split line based on the two parameters
+    vec_1 = vecs[intdir] * dims[intdir] * param
+    
+    # copy the base point
+    new_pt_1 = rh.Point3d(base_pt)
+    # move the new point according to the vector
+    new_pt_1.Transform(rh.Transform.Translation(vec_1))
+    
+    # calculate the opposite of the dir parameter
+    # if the parameter is 0 this results in 1, if 1 then 0
+    other_dir = abs(intdir-1)
+    
+    # create a vector in the other direction the full extent of the bounding box
+    vec_2 = vecs[other_dir] * dims[other_dir] * (1 / abs(sinx)) 
+    
+    # create a copy of the moved point
+    new_pt_2 = rh.Point3d(new_pt_1)
+    # move the point to define the other end point of the split line
+    new_pt_2.Transform(rh.Transform.Translation(vec_2))
+    
+    # create the split line and convert it to a Nurbs Curve
+    # (this is necessary to make the splitting work in the next function)
+    split_line = rh.Line(new_pt_1, new_pt_2).ToNurbsCurve()
+    
+    # use the split_curve() function to split the boundary with the split line
+    parts = split_curve(curve, split_line, True)
+    
+    # return the curves resulting from the split
+    return parts
+
+# this function calls the split_space() function recursively
+# to continuosly split an input curve into parts based on a set of parameters
+def split_recursively(curves, dirs, params):
+    
+    # if there are no more parameters in the list, return the input curves
+    if len(dirs) <= 0 or len(params) <= 0:
+        return curves
+    
+    # get the first parameters and the first curve from the input lists
+    dir = dirs.pop(0)
+    param = params.pop(0)
+    curve = curves.pop(0)
+    
+    # split the curve and add the results to the curves list
+    curves += split_space(curve, dir, param)
+    
+    # run the split_recursively() function again with the updated curves list and the remaining parameters
+    return split_recursively(curves, dirs, params)
+
+# call the split_recursively() function to split the input boundary into parts
+# this starts the recursion process with all the parameters and a single curve in the input list
+curves = split_recursively([boundary], dirs, params)
+```
+>There is a gif image of testing
+![](images/junling.gif)
+
 > Our subdivision script is nice but it is quite constrained because it can only split the space either horizontally or vertically. Can you change the functionality of the `split_space()` function to split the space on an arbitrary angle instead of choosing one of two directions?
 >
 > HINT: You can use [this file](data/2_subd_challenge.gh) as a starting point, which changes the dir input from a binary [0,1] to a continuous range [0-1]. In the script, you can map this range to a full rotation by multiplying it by `360` (if you want to use degrees) or `2*pi` if you want to use radians. Then you can use this rotation parameter to rotate the split line which divides the space.
