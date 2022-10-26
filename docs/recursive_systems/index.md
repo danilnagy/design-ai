@@ -258,6 +258,72 @@ Once you're done implementing this challenge, paste your final code below. Once 
 
 ```python
 import Rhino.Geometry as rh
+
+def grow(pts, params):
+    
+    if len(params) <= 0:
+        return []
+    
+    param = params.pop(0)
+    start_pt = pts.pop(0)
+    
+    lines = []
+    
+    if param == 1:
+        new_pt = rh.Point3d(start_pt)
+        new_pt.Transform(rh.Transform.Translation(0,0,1))
+        lines.append(rh.Line(start_pt, new_pt))
+        pts.append(new_pt)
+        
+        return lines + grow(pts, params)
+    
+    elif param == 2:
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(0,1,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
+        
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+        
+        return lines + grow(pts, params)
+    
+    elif param == 3:
+        
+        new_pt_3 = rh.Point3d(start_pt)
+        new_pt_3.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_3))
+        pts.append(new_pt_3)
+        
+        new_pt_4 = rh.Point3d(start_pt)
+        new_pt_4.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_4))
+        pts.append(new_pt_4)
+        
+        return lines + grow(pts, params)
+    
+    else:
+        return lines
+
+branches = grow([rh.Point3d(0,0,0)], params)
+
+
+```
+
+{: .challenge-title }
+
+> Challenge 2
+>
+> Our subdivision script is nice but it is quite constrained because it can only split the space either horizontally or vertically. Can you change the functionality of the `split_space()` function to split the space on an arbitrary angle instead of choosing one of two directions?
+>
+> HINT: You can use [this file](data/2_subd_challenge.gh) as a starting point, which changes the dir input from a binary [0,1] to a continuous range [0-1]. In the script, you can map this range to a full rotation by multiplying it by `360` (if you want to use degrees) or `2*pi` if you want to use radians. Then you can use this rotation parameter to rotate the split line which divides the space.
+
+Once you're done implementing the challenges, paste your final code into the code block above and create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
+
+```python
+import Rhino.Geometry as rh
 import math
 from scriptcontext import doc
 from math import pi
@@ -401,13 +467,3 @@ def split_recursively(curves, dirs, params):
 # this starts the recursion process with all the parameters and a single curve in the input list
 curves = split_recursively([boundary], dirs, params)
 ```
-
-{: .challenge-title }
-
-> Challenge 2
->
-> Our subdivision script is nice but it is quite constrained because it can only split the space either horizontally or vertically. Can you change the functionality of the `split_space()` function to split the space on an arbitrary angle instead of choosing one of two directions?
->
-> HINT: You can use [this file](data/2_subd_challenge.gh) as a starting point, which changes the dir input from a binary [0,1] to a continuous range [0-1]. In the script, you can map this range to a full rotation by multiplying it by `360` (if you want to use degrees) or `2*pi` if you want to use radians. Then you can use this rotation parameter to rotate the split line which divides the space.
-
-Once you're done implementing the challenges, paste your final code into the code block above and create a pull request on this page called `2-your_uni` (for example `2-dn2216`).
