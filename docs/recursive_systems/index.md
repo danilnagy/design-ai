@@ -415,6 +415,7 @@ def split_recursively(curves, dirs, params):
     curve = curves.pop(0)
     d = dirs.pop(0)
     p = params.pop(0)
+    # Add rotation value here
     r = rots.pop(0)
     
     # Process data
