@@ -10,10 +10,10 @@ In this tutorial we will develop a simple attractor point model to make sure tha
 
 Files you will need for this tutorial:
 
-| Start with these files                  | In case you get lost, you can download the final solution here |
-| :-------------------------------------- | :------------------------------------------------------------- |
+| Start with these files          | In case you get lost, you can download the final solution here |
+| :------------------------------ | :------------------------------------------------------------- |
 | [0_start.3dm](data/0_start.3dm) |                                                                |
-| [0_start.gh](data/0_start.gh)   | [0_end.gh](data/0_end.gh)                              |
+| [0_start.gh](data/0_start.gh)   | [0_end.gh](data/0_end.gh)                                      |
 
 ## Introduction
 
