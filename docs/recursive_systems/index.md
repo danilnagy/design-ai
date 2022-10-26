@@ -628,4 +628,3 @@ def split_recursively(curves, dirs, params):
 # call the split_recursively() function to split the input boundary into parts
 # this starts the recursion process with all the parameters and a single curve in the input list
 curves = split_recursively([boundary], dirs, params)
-
