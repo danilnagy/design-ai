@@ -269,47 +269,55 @@ Once you're done implementing this challenge, paste your final code below. Once 
 
 ```python
 import Rhino.Geometry as rh
-
 def grow(pts, params):
-
+    
     if len(params) <= 0:
         return []
-
+    
     param = params.pop(0)
     start_pt = pts.pop(0)
-
+    
     lines = []
-
+    
     if param == 1:
         new_pt = rh.Point3d(start_pt)
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
         pts.append(new_pt)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 2:
         new_pt_1 = rh.Point3d(start_pt)
         new_pt_1.Transform(rh.Transform.Translation(0,1,1))
         lines.append(rh.Line(start_pt, new_pt_1))
         pts.append(new_pt_1)
-
+        
         new_pt_2 = rh.Point3d(start_pt)
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
         pts.append(new_pt_2)
-
+        
         return lines + grow(pts, params)
-
+    
     elif param == 3:
-
         ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
-
         return lines
-
+        new_pt_3 = rh.Point3d(start_pt)
+        new_pt_3.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_3))
+        pts.append(new_pt_3)
+        
+        new_pt_4 = rh.Point3d(start_pt)
+        new_pt_4.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_4))
+        pts.append(new_pt_4)
+        
+        return lines + grow(pts, params)
+    
     else:
         return lines
-
+	
 branches = grow([rh.Point3d(0,0,0)], params)
 ```
 
@@ -482,7 +490,7 @@ def split_recursively(curves, dirs, params):
 
 {: .challenge-title }
 
-> Challenge 2
+> Challenge 2#
 >
 > Our subdivision script is nice but it is quite constrained because it can only split the space either horizontally or vertically. Can you change the functionality of the `split_space()` function to split the space on an arbitrary angle instead of choosing one of two directions?
 >
