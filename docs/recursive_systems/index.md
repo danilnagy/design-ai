@@ -199,41 +199,52 @@ Here is a breadth-first version of the same branching code, which makes the bran
 
 ```python
 import Rhino.Geometry as rh
-
-def grow(pts, params): ## input to the grow() function is now a list of points
-
+def grow(pts, params):
+    
     if len(params) <= 0:
         return []
-
+    
     param = params.pop(0)
-    start_pt = pts.pop(0) ## the point used for branching is now the first point taken from the list
-
+    start_pt = pts.pop(0)
+    
     lines = []
-
+    
     if param == 1:
         new_pt = rh.Point3d(start_pt)
         new_pt.Transform(rh.Transform.Translation(0,0,1))
         lines.append(rh.Line(start_pt, new_pt))
-        pts.append(new_pt) ## the new point is added to the list of points
-
-        return lines + grow(pts, params) ## the function is called again with the updated list of points
-
+        pts.append(new_pt)
+        
+        return lines + grow(pts, params)
+    
     elif param == 2:
         new_pt_1 = rh.Point3d(start_pt)
         new_pt_1.Transform(rh.Transform.Translation(0,1,1))
         lines.append(rh.Line(start_pt, new_pt_1))
-        pts.append(new_pt_1) ## the new point is added to the list of points
-
+        pts.append(new_pt_1)
+        
         new_pt_2 = rh.Point3d(start_pt)
         new_pt_2.Transform(rh.Transform.Translation(0,-1,1))
         lines.append(rh.Line(start_pt, new_pt_2))
-        pts.append(new_pt_2) ## the new point is added to the list of points
-
-        return lines + grow(pts, params) ## the function is called again with the updated list of points
-        ## note that we can now call the function just once, since the important part for the branching is
-        ## adding the two new points to the end of the list. With this queue-based approach, each call of the
-        ## function just consumes another parameter using oldest point in the list.
-
+        pts.append(new_pt_2)
+        
+        return lines + grow(pts, params)
+    
+    elif param == 3:
+        ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
+        return lines
+        new_pt_1 = rh.Point3d(start_pt)
+        new_pt_1.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_1))
+        pts.append(new_pt_1)
+        
+        new_pt_2 = rh.Point3d(start_pt)
+        new_pt_2.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_2))
+        pts.append(new_pt_2)
+        
+        return lines + grow(pts, params)
+    
     else:
         return lines
 
