@@ -293,6 +293,19 @@ def grow(pts, params):
     elif param == 3:
 
         ### ADD CODE HERE TO DEFINE BEHAVIOR FOR THE PARAMETER '3' ###
+        new_pt_3 = rh.Point3d(start_pt)
+        new_pt_3.Transform(rh.Transform.Translation(1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_3))
+        pts.append(new_pt_3)
+        
+        new_pt_4 = rh.Point3d(start_pt)
+        new_pt_4.Transform(rh.Transform.Translation(-1,0,1))
+        lines.append(rh.Line(start_pt, new_pt_4))
+        pts.append(new_pt_4)
+        
+        return lines + grow(pts, params)
+        
+        return lines
 
         return lines
 
