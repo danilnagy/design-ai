@@ -28,7 +28,7 @@ In this tutorial, you will use object-oriented and dynamic programming to implem
 | :------------------------------------ |
 | [3_start.gh](data/3_start.gh)         |
 
-To start, open the file above within a new Rhino document. The Grasshopper components create a set of points based on parameters created by a `Gene Pool` component. These points are input into a Python component that contains a script defining a single class called `Agent` that has the following properties and methods:
+To start, open the file above within a new Rhino document. In the model, the first set of Grasshopper components create a list of points based on parameters created by a `Gene Pool` component. These points are input into a Python component that contains a script defining a single class called `Agent` that has the following properties and methods:
 
 <u>Properties</u>
 
@@ -84,15 +84,15 @@ for agent in agents:
 
 {: .challenge-title }
 
-> Challenge 1: Implement `cluster()` method
+> Challenge 1: Implement cluster method
 >
-> So far, the `Agent` class implements one behavioral method called `collide()` which checks the distance between two instances of the class and moves them away from each other if they are too close. For this challenge, implement a complementary method called “cluster” which will move the object closer to a specified 'neighbor' object.
+> So far, the `Agent` class implements one behavioral method called `collide()` which checks the distance between two instances of the class and moves them away from each other if they are too close. For this challenge, implement a complementary method called `cluster()` which will move the object closer to a specified 'neighbor' object.
 >
-> To implement the challenge, paste the code below into the Python component. This code implements some additional features as described below. Replace the `pass` keyword in the `cluster()` method of the `Agent` class with code to enable the clustering behavior between two objects. After you’ve properly completed the method, you should see the objects cluster together in the canvas. This is driven by the objects trying to move closer to their neighbors, while still avoiding overlaps due to the collision() method:
+> To implement the challenge, first replace the code in the Python component with that at the bottom of this section. This code implements some additional features as described below. Then, replace the `pass` keyword in the `cluster()` method of the `Agent` class with code to enable the clustering behavior between two objects. After you’ve properly completed the method, you should see the objects cluster together in the viewport. This is driven by the objects trying to move closer to their neighbors, while still avoiding overlaps due to the `collide()` method:
 >
 > ![](images/3_02.png)
 >
-> Hint: The cluster() method should be very similar to the collision() method, with a few minor differences:
+> Hint: The `cluster()` method should be very similar to the `collide()` method, with a few minor differences:
 >
 > - After measuring the distance between center points, the movement behavior should be triggered if the distance is **greater than** the sum of radiuses.
 > - The vector for moving the objects should be based on the gap between them (the distance minus the sum of radii) instead of the overlap (sum of radii minus the distance)
@@ -102,7 +102,7 @@ for agent in agents:
 
 > Challenge 2: Implement stopping condition
 >
-> Right now the main loop will run for the number of iterations set by the `max_iters` parameter. However, we have no way of knowing if this is too many iterations to run or not enough based on our criteria for packing the circles.
+> Right now the main loop will run for the number of iterations set by the `max_iters` parameter. However, we have no way of knowing if this is too many iterations to run or not enough based on how we want the circles to pack.
 >
 > For this challenge, can you implement a stopping condition to terminate the iteration loop if the agents did not move a sufficient amount in the previous iteration? This will cause the process to end once the circles are near their neighbors without overlapping. Once you've implement the stopping condition you should be able to increase the `max_iters` to a much larger value (for example 1000) so that the loop can run for longer if it needs to before the stopping condition is met.
 >
@@ -112,11 +112,11 @@ The code below implements some additional features to make it easier for you to 
 
 - `Line 10`: When an object is initialized, an empty list called “neighbors” is created to store the object’s neighbors.
 - `Line 13`: An addNeighbor() method has been implemented in the Room class which adds a given object to the instance’s list of neighbors.
-  Line 35: An empty method called cluster() has been created. The method contains a single line with the pass keyword which will do nothing but is necessary so that the code does not throw an error due to an empty method. This is where you will implement the object’s cluster behavior for this week’s challenge.
-  Line 48: A loop has been added which iterates over each room object and uses its addNeighbor() method to add the previous room in the list to it’s list of neighbors.
-  Line 58: Within the optimization loop which runs the collision behavior for each pair of rooms, another loop has been added to run the “cluster” behavior for each room and its neighbors.
+- `Line 35`: An empty method called cluster() has been created. The method contains a single line with the pass keyword which will do nothing but is necessary so that the code does not throw an error due to an empty method. This is where you will implement the object’s cluster behavior for this week’s challenge.
+- `Line 48`: A loop has been added which iterates over each room object and uses its addNeighbor() method to add the previous room in the list to it’s list of neighbors.
+- `Line 58`: Within the optimization loop which runs the collision behavior for each pair of rooms, another loop has been added to run the “cluster” behavior for each room and its neighbors.
 
-Once you're done implementing the challenges, paste your final code into the code block above and create a pull request on this page called `3-your_uni` (for example `3-dn2216`).
+Once you're done implementing the challenges, paste your final code into the code block below and create a pull request on this page called `3-your_uni` (for example `3-dn2216`).
 
 ```python
 import Rhino.Geometry as rh
@@ -197,5 +197,4 @@ circles = []
 
 for agent in agents:
     circles.append(agent.get_circle())
-
 ```
