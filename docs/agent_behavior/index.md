@@ -20,11 +20,15 @@ In computer science, such systems are often called agent-based models and we can
 
 ## Space Packing Tutorial
 
+In this tutorial, you will use object-oriented and dynamic programming to implement an agent-based system for packing a set of circles in a plane.
+
+![](images/3_04.gif)
+
 | Files you will need for this tutorial |
 | :------------------------------------ |
 | [3_start.gh](data/3_start.gh)         |
 
-To start, open the file above in within a new Rhino document. This file includes a basic definition of an agent-based system for packing a set of circles in a plane. The Grasshopper components create a set of points based on parameters created by a `Gene Pool` component. These points are input into a Python component that contains a script defining a single class called `Agent` that has the following properties and methods:
+To start, open the file above within a new Rhino document. The Grasshopper components create a set of points based on parameters created by a `Gene Pool` component. These points are input into a Python component that contains a script defining a single class called `Agent` that has the following properties and methods:
 
 <u>Properties</u>
 
@@ -33,8 +37,8 @@ To start, open the file above in within a new Rhino document. This file includes
 
 <u>Methods</u>
 
-- _collide_ - This is the main behavior method which identifies if another instance of the agent Class overlaps with it and if so moves both itself and other agent away from each other. The distance the agents are moved is the amount of their overlap multiplied by a value alpha (within the range 0.0-1.0) which controls the extent to which each agent moves at each time step.
-- _get_circle_ - This is a utility method which return a circle defined by the agent's center point and radius which can be used to visualize the agents in Grasshopper
+- _collide()_ - This is the main behavior method which identifies if another instance of the agent Class overlaps with it and if so moves both itself and other agent away from each other. The distance the agents are moved is the amount of their overlap multiplied by a value alpha (within the range 0.0-1.0) which controls the extent to which each agent moves at each time step.
+- _get_circle()_ - This is a utility method which return a circle defined by the agent's center point and radius which can be used to visualize the agents in Grasshopper
 
 The main body of the code first defines an empty list called `agents` which will store all the instances we will create of the `Agent` class. We then loop over all the points coming in through the `pts` input, and for each point create a new instance of the `Agent` class with that point as the agent's center point. We are also passing the `radius` input into the constructor to set the radius parameter for each instance. Once created each instance is then added to the `agents` list using the list's `.append()` method.
 
