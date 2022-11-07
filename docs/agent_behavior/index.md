@@ -118,7 +118,7 @@ The code below implements some additional features to make it easier for you to 
 
 Once you're done implementing the challenges, paste your final code into the code block below and create a pull request on this page called `3-your_uni` (for example `3-dn2216`).
 
-```python
+```python 3-ljc2177
 import Rhino.Geometry as rh
 
 class Agent:
@@ -166,8 +166,27 @@ class Agent:
 
     # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other):
+         
+        d = self.cp.DistanceTo(other.cp)
 
-        pass
+        if d > (self.radius + other.radius):
+
+            pt_2 = other.cp
+            pt_1 = self.cp
+
+            v = pt_2 - pt_1
+
+            v.Unitize()
+            v *= d - (self.radius + other.radius)
+            v *= beta
+
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
+
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+        
 
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
@@ -182,9 +201,16 @@ for pt in pts:
 for i in range(len(agents)):
     agents[i].add_neighbor(agents[i-1])
 
-for i in range(max_iters):
-    for j,agent_1 in enumerate(agents):
 
+for i in range(max_iters):
+    
+    print i
+    
+    for j,agent_1 in enumerate(agents):
+        
+        if j == 0:
+            origin = rh.Point3d(agent_1.cp)
+        
         # cluster to all agent's neighbors
         for agent_2 in agent_1.neighbors:
             agent_1.cluster(agent_2)
@@ -192,6 +218,13 @@ for i in range(max_iters):
         # collide with all agents after agent in list
         for agent_2 in agents[j+1:]:
             agent_1.collide(agent_2)
+        
+        if j == 0:
+            end = rh.Point3d(agent_1.cp)
+    
+    if origin == end:
+        break
+            
 
 circles = []
 
