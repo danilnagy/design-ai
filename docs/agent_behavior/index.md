@@ -37,16 +37,32 @@ To start, open the file above within a new Rhino document. The Grasshopper compo
 
 <u>Methods</u>
 
-- _collide()_ - This is the main behavior method which identifies if another instance of the agent Class overlaps with it and if so moves both itself and other agent away from each other. The distance the agents are moved is the amount of their overlap multiplied by a value alpha (within the range 0.0-1.0) which controls the extent to which each agent moves at each time step.
-- _get_circle()_ - This is a utility method which return a circle defined by the agent's center point and radius which can be used to visualize the agents in Grasshopper
+- _collide()_ - This is the main behavior method which identifies if another instance of the agent Class overlaps with it and if so moves both itself and the other agent away from each other. The distance the agents are moved is the amount of their overlap multiplied by a value alpha (within the range 0.0-1.0) which controls the extent to which each agent moves at each time step.
+- _get_circle()_ - This is a utility method which returns a circle defined by the agent's center point and radius which can be used to visualize the agents in Grasshopper
 
 The main body of the code first defines an empty list called `agents` which will store all the instances we will create of the `Agent` class. We then loop over all the points coming in through the `pts` input, and for each point create a new instance of the `Agent` class with that point as the agent's center point. We are also passing the `radius` input into the constructor to set the radius parameter for each instance. Once created each instance is then added to the `agents` list using the list's `.append()` method.
 
+```python
+agents = []
+
+for pt in pts:
+    my_agent = Agent(pt, radius)
+    agents.append(my_agent)
+```
+
 In the next block of code, we have a nested set of three loops. The first loop creates an iterator up to the `max_iters` parameter which controls the maximum number of times the dynamic system will run. Within each iteration (or time step), the next two loops iterate over each agent twice, so that each agent has a chance to interact with another agent in the system. Once we confirm that the two agents are not the same (using Python's helpful `is` and `not` operators), we run the `.collide()` method from one agent to the other.
+
+```python
+for i in range(max_iters):
+    for agent_1 in agents:
+        for agent_2 in agents:
+            if agent_1 is not agent_2:
+                agent_1.collide(agent_2)
+```
 
 {: .note }
 
-> Using these two loops and conditional statement is one way to check each agent against every other while ensuring that the agents are not the same. Another way is to alter the second loop so that we only look at the agents 'after' the current agent in the list:
+> Using these two loops and a conditional statement is one way to check each agent against every other while ensuring that the agents are not the same. Another way is to alter the second loop so that we only look at the agents 'after' the current agent in the list:
 >
 > ```python
 > for i in range(max_iters):
@@ -57,7 +73,14 @@ In the next block of code, we have a nested set of three loops. The first loop c
 >
 > A nice side-effect of this is that each pair will only be considered once during each time step, and it saves the effort of checking if the two agents are the same, since we are picking `agent_2` from a subset of the `agents` list starting at the index of the first agent (j) plus 1.
 
-After running this set of loops the agents should be in their final positions. At this point we can iterate over the `agents` list one more time and get the circle representing each agent so we can output it back to Grasshopper and visualize it in Rhino. The Grasshopper script also contains components to visualize the movement vectors from the agent's initial to final positions.
+After running this set of loops the agents should be in their final positions. At this point, we can iterate over the `agents` list one more time and get the circle representing each agent so we can output it back to Grasshopper and visualize it in Rhino. The Grasshopper script also contains components to visualize the movement vectors from the agent's initial to final positions.
+
+```python
+circles = []
+
+for agent in agents:
+    circles.append(agent.get_circle())
+```
 
 {: .challenge-title }
 
