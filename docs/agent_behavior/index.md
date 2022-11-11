@@ -131,44 +131,72 @@ class Agent:
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
-        self.neighbors.append(other)
-
-    # method for checking distance to other room object and moving apart if they are overlapping
+        self.neighbors.append(other)    
     def collide(self, other):
-
+        
         d = self.cp.DistanceTo(other.cp)
-
+        
         if d < self.radius + other.radius:
-
+            
             pt_2 = other.cp
             pt_1 = self.cp
-
+            
             # get vector from self to other
             v = pt_2 - pt_1
-
+            
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
             v *= (self.radius + other.radius - d) / 2
-            # multiply by alpha parameter to control
+            # multiply by alpha parameter to control 
             # amount of movement at each time step
             v *= alpha
-
+            
             # move other object
             t = rh.Transform.Translation(v)
             pt_2.Transform(t)
-
+            
             # reverse vector and move self same amount
             # in opposite direction
             v.Reverse()
             t = rh.Transform.Translation(v)
             pt_1.Transform(t)
-
-    # method for checking distance to other instance and moving closer if they are not touching
+            
+            self.v=v
+    
     def cluster(self, other):
+        
+        d = self.cp.DistanceTo(other.cp)
+        
+        if d > self.radius + other.radius:
+            
+            pt_2 = other.cp
+            pt_1 = self.cp
+            
+            # get vector from self to other
+            v = pt_1 - pt_2
+            
+            # change vector magnitude to 1
+            v.Unitize()
+            # set magnitude to half the overlap distance
+            v *= (d - (self.radius + other.radius))/2
+            # multiply by alpha parameter to control 
+            # amount of movement at each time step
+            v *= alpha
+                        
+            # move other object
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+            
+            v.Reverse()
 
-        pass
-
+            # reverse vector and move self same amount
+            # in opposite direction
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
+            
+            self.v=v
+            
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
 
@@ -187,14 +215,29 @@ for i in range(max_iters):
 
         # cluster to all agent's neighbors
         for agent_2 in agent_1.neighbors:
-            agent_1.cluster(agent_2)
+            if hasattr(agent_1, 'v'):
+                if abs(agent_1.v[0]) < 0.01:
+                    break
+                else:
+                    agent_1.cluster(agent_2)
+            else:
+                agent_1.cluster(agent_2)
+                
 
         # collide with all agents after agent in list
         for agent_2 in agents[j+1:]:
-            agent_1.collide(agent_2)
+            if hasattr(agent_1, 'v'):
+                if abs(agent_1.v[0]) < 0.01:
+                    break
+                else:
+                    agent_1.collide(agent_2)
+            else: 
+                agent_1.cluster(agent_2)
+    print(i)       
 
 circles = []
 
 for agent in agents:
+    
     circles.append(agent.get_circle())
 ```
