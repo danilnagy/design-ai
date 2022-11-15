@@ -137,6 +137,9 @@ class Agent:
     def collide(self, other):
 
         d = self.cp.DistanceTo(other.cp)
+       
+        # CHALLENGE 2 | PSEUDO CODE: Here, the code would be something like
+        # If d is greater than self.radius, return and break the loop
 
         if d < self.radius + other.radius:
 
@@ -166,15 +169,45 @@ class Agent:
 
     # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other):
+        
+        # check distance from point to other radius
+        d = self.cp.DistanceTo(other.cp)
+        
+        # CHALLENGE 2 | PSEUDO CODE: Here, the code would be something like
+        # If d is greater than self.radius, return and break the loop
+        
+        if d > self.radius + other.radius:
 
-        pass
+            pt_2 = other.cp
+            pt_1 = self.cp
+
+            # get vector from self to other
+            v = pt_2 - pt_1
+
+            # change vector magnitude to 1
+            v.Unitize()
+            # set magnitude to the overlap distance
+            v *= (d - self.radius + other.radius)/2
+            # multiply by alpha parameter to control
+            # multiply alpha parameter by negative 1 to ensure distance is closer, not further away
+            v *= (alpha * -1)
+
+            # move other object
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+
+            # reverse vector and move self same amount
+            # in opposite direction
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
 
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
 
 agents = []
 
-for pt in pts:
+for pt in pts: 
     my_agent = Agent(pt, radius)
     agents.append(my_agent)
 
