@@ -137,6 +137,8 @@ class Agent:
     def collide(self, other):
 
         d = self.cp.DistanceTo(other.cp)
+        
+        thresh = 0
 
         if d < self.radius + other.radius:
 
@@ -145,30 +147,85 @@ class Agent:
 
             # get vector from self to other
             v = pt_2 - pt_1
+            #print(v[0])
+            
+            #set threshold for vector strength
+            thresh = abs(v[0]+v[1])
+            #ignore iteration if under strength threshold
+            if thresh <.001:
+                pass
+            
+            else:
 
             # change vector magnitude to 1
-            v.Unitize()
+                v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (self.radius + other.radius - d) / 2
+                v *= (self.radius + other.radius - d) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
-            v *= alpha
+                v *= alpha
 
             # move other object
-            t = rh.Transform.Translation(v)
-            pt_2.Transform(t)
+                t = rh.Transform.Translation(v)
+                pt_2.Transform(t)
 
             # reverse vector and move self same amount
             # in opposite direction
-            v.Reverse()
-            t = rh.Transform.Translation(v)
-            pt_1.Transform(t)
+                v.Reverse()
+                t = rh.Transform.Translation(v)
+                pt_1.Transform(t)
+                
+            return thresh
+            
 
+            
+        
     # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other):
+     
+        d = self.cp.DistanceTo(other.cp)
+        
+        thresh = 0
+        
+        #move if distance between points is greater than sum of radii
+        if d > self.radius + other.radius:
 
-        pass
+            pt_2 = other.cp
+            pt_1 = self.cp
 
+            # get vector from self to other
+            v = pt_1 - pt_2
+            #print(v)
+
+
+            thresh = abs(v[0]+v[1])
+            if thresh <.001:
+                pass
+            
+            else:
+
+            # change vector magnitude to 1
+                v.Unitize()
+            # set magnitude to half the gap distance
+                v *= (d - self.radius + other.radius) / 2
+            # multiply by alpha parameter to control
+            # amount of movement at each time step
+                v *= alpha
+
+            # move other object towards
+                #v.Reverse()
+                t = rh.Transform.Translation(v)
+                pt_2.Transform(t)
+
+            # move self same amount
+            # in same direction
+                #v.Reverse()
+                t = rh.Transform.Translation(v)
+                pt_1.Transform(t)
+                
+            return thresh
+            
+                
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
 
@@ -183,7 +240,14 @@ for i in range(len(agents)):
     agents[i].add_neighbor(agents[i-1])
 
 for i in range(max_iters):
+    
+    thresh_both = 0
+    
     for j,agent_1 in enumerate(agents):
+        
+        #print j
+        
+        #return thresh
 
         # cluster to all agent's neighbors
         for agent_2 in agent_1.neighbors:
@@ -192,6 +256,13 @@ for i in range(max_iters):
         # collide with all agents after agent in list
         for agent_2 in agents[j+1:]:
             agent_1.collide(agent_2)
+            
+    if thresh_both < 0.001:
+        print("busted")
+        break
+            
+
+#print[i-1]            
 
 circles = []
 
