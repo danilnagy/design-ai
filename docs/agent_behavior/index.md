@@ -118,22 +118,24 @@ The code below implements some additional features to make it easier for you to 
 
 Once you're done implementing the challenges, paste your final code into the code block below and create a pull request on this page called `3-your_uni` (for example `3-dn2216`).
 
-```python
+```python 3-lr3102
+
+#not sure about the method for challange number 2
+
 import Rhino.Geometry as rh
 
 class Agent:
-
+    
     def __init__(self, pt, r):
-
+        
         self.cp = pt
         self.radius = r
         self.neighbors = []
-
-    # method for adding another instance to a list of neighbors
+        
+        
     def add_neighbor(self, other):
         self.neighbors.append(other)
-
-    # method for checking distance to other room object and moving apart if they are overlapping
+        
     def collide(self, other):
 
         d = self.cp.DistanceTo(other.cp)
@@ -143,32 +145,49 @@ class Agent:
             pt_2 = other.cp
             pt_1 = self.cp
 
-            # get vector from self to other
+           
             v = pt_2 - pt_1
 
-            # change vector magnitude to 1
+          
             v.Unitize()
-            # set magnitude to half the overlap distance
+            
             v *= (self.radius + other.radius - d) / 2
-            # multiply by alpha parameter to control
-            # amount of movement at each time step
+           
             v *= alpha
 
-            # move other object
+        
             t = rh.Transform.Translation(v)
             pt_2.Transform(t)
 
-            # reverse vector and move self same amount
-            # in opposite direction
             v.Reverse()
             t = rh.Transform.Translation(v)
             pt_1.Transform(t)
-
-    # method for checking distance to other instance and moving closer if they are not touching
+    
+    
     def cluster(self, other):
+        
+        d = other.cp.DistanceTo(self.cp)
+        
+        if d > self.radius + other.radius:
+            
+            pt_2 = self.cp
+            pt_1 = other.cp
+            
 
-        pass
-
+            v = pt_2 - pt_1
+            
+            v.Unitize()
+            v *= (self.radius + other.radius) / 2
+            v *= beta
+            
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
+            
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+            
+            
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
 
@@ -177,24 +196,31 @@ agents = []
 for pt in pts:
     my_agent = Agent(pt, radius)
     agents.append(my_agent)
+    
 
-# for each agent in the list, add the previous agent as its neighbor
 for i in range(len(agents)):
     agents[i].add_neighbor(agents[i-1])
 
 for i in range(max_iters):
     for j,agent_1 in enumerate(agents):
 
-        # cluster to all agent's neighbors
-        for agent_2 in agent_1.neighbors:
-            agent_1.cluster(agent_2)
-
-        # collide with all agents after agent in list
-        for agent_2 in agents[j+1:]:
-            agent_1.collide(agent_2)
+        if j == 0:
+            origin = rh.Point3d(agent_1.cp)
+            
+            
+            for agent_2 in agent_1.neighbors:
+                agent_1.cluster(agent_2)
+    
+            
+            for agent_2 in agents[j+1:]:
+                agent_1.collide(agent_2)
+                
+        if j == 10:
+            end = rh.Point3d(agent_1.cp)
+    
 
 circles = []
 
 for agent in agents:
+    
     circles.append(agent.get_circle())
-```
