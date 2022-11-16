@@ -3,7 +3,6 @@ layout: default
 title: 3. Programming behavior
 nav_order: 5
 ---
-
 # Programming behavior
 
 In this section we will explore the concepts of emergence and agent-based behavior and learn how we can program them in Python using dynamic and object-oriented programming.
