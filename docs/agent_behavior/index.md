@@ -117,7 +117,6 @@ The code below implements some additional features to make it easier for you to 
 - `Line 58`: Within the optimization loop which runs the collision behavior for each pair of rooms, another loop has been added to run the “cluster” behavior for each room and its neighbors.
 
 Once you're done implementing the challenges, paste your final code into the code block below and create a pull request on this page called `3-your_uni` (for example `3-dn2216`).
-
 ```python
 import Rhino.Geometry as rh
 
