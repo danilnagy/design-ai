@@ -167,7 +167,25 @@ class Agent:
     # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other):
 
-        pass
+        d = self.cp.DistanceTo(other.cp)
+        
+        if d > self.radius + other.radius:
+            pt_2 = other.cp
+            pt_1 = self.cp
+
+            v = pt_2 - pt_1
+            # vector magnitude
+
+            v.Unitize()
+            v *= (d - self.radius + other.radius)/2
+
+            v *= (alpha * -1)
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
 
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
