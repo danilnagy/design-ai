@@ -17,9 +17,14 @@ SUBD
 - [Open issues](https://github.com/danilnagy/design-ai/labels/subd)
 
 <dl>
-<dt>SUBD</dt>
+<dt></dt>
 <dd><a href="https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing">Code</a><a href="https://github.com/danilnagy/design-ai/labels/subd">Open issues</a></dd>
 </dl>
+
+SUBD
+: [Fork this repo](https://github.com/danilnagy/design-ai/fork)
+
+: [Fork this repo](https://github.com/danilnagy/design-ai/fork)
 
 You can work on as many issues as you like from one or both projects. Your work will be judged not on the number of issues you tackled but on the overall quality of your code and contribution.
 
