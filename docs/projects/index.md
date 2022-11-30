@@ -11,10 +11,14 @@ For the final project, you will contribute to the design-ai code base by submitt
 ## There are two projects for you to choose from:
 
 Room layout based on subdivision
-: [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/subd) [Open issues](https://github.com/danilnagy/design-ai/labels/subd)
+: [Files](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/subd)
+
+: [Open issues](https://github.com/danilnagy/design-ai/labels/subd)
 
 Dynamic space packing
-: [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing) [Open issues](https://github.com/danilnagy/design-ai/labels/packing)
+: [Files](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing)
+
+: [Open issues](https://github.com/danilnagy/design-ai/labels/packing)
 
 You can work on as many issues as you like from one or both projects. Your work will be judged not on the number of issues you tackled but on the overall quality of your code and contribution.
 
