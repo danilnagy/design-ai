@@ -14,8 +14,12 @@ Agent-based systems are often used to model complex behaviors in nature, which a
 
 ![](images/3_04.gif)
 
-| Files you will need for this tutorial |
-| :------------------------------------ |
-| [3_start.gh](data/3_start.gh)         |
+| Files you will need for this tutorial | al                                                                                 |
+| :------------------------------------ | ---------------------------------------------------------------------------------- |
+| SUBD {: .label .label-green }         | [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing) |
+|                                       | [Open issues](https://github.com/danilnagy/design-ai/labels/subd)                  |
 
 To start, open the file above within a new Rhino document. In the model, the first set of Grasshopper components create a list of points based on parameters created by a `Gene Pool` component. These points are input into a Python component that contains a script defining a single class called `Agent` that has the following properties and methods:
+
+SUBD {: .label .label-green }: https://github.com/danilnagy/design-ai/labels/subd
+: https://github.com/danilnagy/design-ai/labels/packing
