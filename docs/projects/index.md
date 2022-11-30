@@ -8,7 +8,7 @@ nav_order: 6
 
 For the final project, you will contribute to the design-ai code base by submitting pull requests for one or more open issues in the project.
 
-### 1. There are two projects for you to choose from:
+### There are two projects for you to choose from:
 
 <u>Room layout based on subdivision</u>
 
@@ -22,7 +22,7 @@ For the final project, you will contribute to the design-ai code base by submitt
 
 You can work on as many issues as you like from one or both projects. Your work will be judged not on the number of issues you tackled but on the overall quality of your code and contribution.
 
-### 2. To submit your work, please follow these steps **<u>for each issue</u>**:
+### To submit your work, please follow these steps **<u>for each issue</u>**:
 
 1. [Fork this repo](https://github.com/danilnagy/design-ai/fork)
 2. In your fork, create a new branch and call it `your-uni/issue-number`, for example `dn2216/85` if I was submitting for [https://github.com/danilnagy/design-ai/issues/85](https://github.com/danilnagy/design-ai/issues/85)
