@@ -8,7 +8,7 @@ nav_order: 6
 
 For the final project, you will contribute to the design-ai code base by submitting pull requests for one or more open issues in the project.
 
-## There are two projects for you to choose from:
+There are two projects for you to choose from:
 
 <u>Room layout based on subdivision</u>
 
