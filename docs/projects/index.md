@@ -18,9 +18,7 @@ SUBD
 
 <dl>
 <dt>SUBD</dt>
-<dd>[Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing)</dd>
-<dt></dt>
-<dd>[Open issues](https://github.com/danilnagy/design-ai/labels/subd)</dd>
+<dd><a href="https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing">Code</a><a href="https://github.com/danilnagy/design-ai/labels/subd">Open issues</a></dd>
 </dl>
 
 You can work on as many issues as you like from one or both projects. Your work will be judged not on the number of issues you tackled but on the overall quality of your code and contribution.
