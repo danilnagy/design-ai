@@ -8,23 +8,13 @@ nav_order: 6
 
 For the final project, you will contribute to the design-ai code base by submitting pull requests for one or more open issues in the project.
 
-## There are two main projects for you to choose from:
+## There are two projects for you to choose from:
 
-SUBD
-{: .label .label-green }
+Room layout based on subdivision
+: [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/subd) [Open issues](https://github.com/danilnagy/design-ai/labels/subd)
 
-- [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing)
-- [Open issues](https://github.com/danilnagy/design-ai/labels/subd)
-
-<dl>
-<dt></dt>
-<dd><a href="https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing">Code</a><a href="https://github.com/danilnagy/design-ai/labels/subd">Open issues</a></dd>
-</dl>
-
-SUBD
-: [Fork this repo](https://github.com/danilnagy/design-ai/fork)
-
-: [Fork this repo](https://github.com/danilnagy/design-ai/fork)
+Dynamic space packing
+: [Code](https://github.com/danilnagy/design-ai/tree/gh-pages/docs/projects/packing) [Open issues](https://github.com/danilnagy/design-ai/labels/packing)
 
 You can work on as many issues as you like from one or both projects. Your work will be judged not on the number of issues you tackled but on the overall quality of your code and contribution.
 
