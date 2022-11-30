@@ -89,3 +89,45 @@ class Agent:
 
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
+
+
+def run(pts, radii, max_iters, alpha):
+
+    agents = []
+
+    for i, pt in enumerate(pts):
+        my_agent = Agent(pt, radii[i])
+        agents.append(my_agent)
+
+    # for each agent in the list, add the previous agent as its neighbor
+    for i in range(len(agents)):
+        agents[i].add_neighbor(agents[i-1])
+
+    for i in range(max_iters):
+
+        total_amount = 0
+
+        for j, agent_1 in enumerate(agents):
+
+            # cluster to all agent's neighbors
+            for agent_2 in agent_1.neighbors:
+                total_amount += agent_1.cluster(agent_2, alpha)
+
+            # collide with all agents after agent in list
+            for agent_2 in agents[j+1:]:
+                # add extra multiplier to decrease effect of cluster
+                total_amount += agent_1.collide(agent_2, alpha/5)
+
+        if total_amount < .01:
+            break
+
+    iters = i
+
+    print("process ran for {} iterations".format(i))
+
+    circles = []
+
+    for agent in agents:
+        circles.append(agent.get_circle())
+
+    return circles, iters
