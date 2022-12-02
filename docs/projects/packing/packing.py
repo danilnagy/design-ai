@@ -1,16 +1,18 @@
 import Rhino.Geometry as rh
 
-
 class Agent:
 
-    def __init__(self, pt, r):
+    def __init__(self, pt, r, nam, adj):
 
         self.cp = pt
         self.radius = r
+        self.name = nam
+        self.adjacency = adj
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
+
         self.neighbors.append(other)
 
     # method for checking distance to other room object and moving apart if they are overlapping
@@ -91,17 +93,25 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha):
+def run(pts, radii, names, adjacencies, max_iters, alpha):
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[i])
         agents.append(my_agent)
+        
+    print agents[9].adjacency
 
-    # for each agent in the list, add the previous agent as its neighbor
+    # for each agent in the list, add any agent that has it within its adjacencies list as its neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        
+        for j in range(len(agents)-1):
+        
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -123,7 +133,7 @@ def run(pts, radii, max_iters, alpha):
 
     iters = i
 
-    print("process ran for {} iterations".format(i))
+    # print("process ran for {} iterations".format(i))
 
     circles = []
 
