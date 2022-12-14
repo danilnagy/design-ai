@@ -5,7 +5,8 @@ class Agent:
     def __init__(self, pt, r, name, adj):
 
         self.cp = pt
-        self.radius = r
+        self.edge = r
+        self.plane = p
         self.name = name
         self.adjacency = adj
         self.neighbors = []
@@ -22,7 +23,7 @@ class Agent:
 
         amount = 0
 
-        if d < self.radius + other.radius:
+        if d < self.edge + other.edge:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -33,7 +34,7 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (self.radius + other.radius - d) / 2
+            v *= (self.edge + other.edge - d) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
@@ -59,7 +60,7 @@ class Agent:
 
         amount = 0
 
-        if d > self.radius + other.radius:
+        if d > self.edge + other.edge:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -70,7 +71,7 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (d - (self.radius + other.radius)) / 2
+            v *= (d - (self.edge + other.edge)) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
@@ -89,17 +90,17 @@ class Agent:
 
         return amount
 
-    def get_circle(self, plane):
-        #return rh.Circle(self.cp, self.radius)
-        return rh.Rectangle3d(plane, self.radius, self.radius)
+    def get_rectangle(self):
+        # return rh.Rectangle(self.cp, self.edge)
+        return rh.Rectangle((self.cp+self.cp), self.edge, self.edge)
 
 
-def run(pts, radii, names, adjacencies, max_iters, alpha, plane):
+def run(pts, edges, names, adjacencies, max_iters, alpha):
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i], names[i], adjacencies[i], plane[i])
+        my_agent = Agent(pt, edges[i], names[i], adjacencies[i])
         agents.append(my_agent)
         
     # for each agent in the list, add any agent that has it within its adjacencies list as its neighbor
@@ -132,9 +133,9 @@ def run(pts, radii, names, adjacencies, max_iters, alpha, plane):
 
     iters = i
 
-    circles = []
+    rects = []
 
     for agent in agents:
-        circles.append(agent.get_circle())
+        rects.append(agent.get_rectangle())
 
-    return circles, iters
+    return rects, iters
