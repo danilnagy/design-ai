@@ -88,7 +88,7 @@ for agent in agents:
 >
 > So far, the `Agent` class implements one behavioral method called `collide()` which checks the distance between two instances of the class and moves them away from each other if they are too close. For this challenge, implement a complementary method called `cluster()` which will move the object closer to a specified 'neighbor' object.
 >
-> To implement the challenge, first replace the code in the Python component with that at the bottom of this section. This code implements some additional features as described below. Then, replace the `pass` keyword in the `cluster()` method of the `Agent` class with code to enable the clustering behavior between two objects. After you’ve properly completed the method, you should see the objects cluster together in the viewport. This is driven by the objects trying to move closer to their neighbors, while still avoiding overlaps due to the `collide()` method:
+> To implement the challenge, first replace the code in the Python component with that at the bottom of this section. This code implements some additional features as described below. You can also use [this file](data/3_challenge_start.gh) as a starting point which has the code changes already implemented. Then, replace the `pass` keyword in the `cluster()` method of the `Agent` class with code to enable the clustering behavior between two objects. After you’ve properly completed the method, you should see the objects cluster together in the viewport. This is driven by the objects trying to move closer to their neighbors, while still avoiding overlaps due to the `collide()` method:
 >
 > ![](images/3_02.png)
 >
