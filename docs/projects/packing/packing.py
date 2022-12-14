@@ -91,7 +91,9 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha):
+def run(pts, radii, max_iters, alpha, adjacencies):
+
+    print(adjacencies)
 
     agents = []
 
