@@ -1,6 +1,5 @@
 import Rhino.Geometry as rh
 
-
 class Agent:
 
     def __init__(self, pt, r):
@@ -86,9 +85,15 @@ class Agent:
             pt_2.Transform(t)
 
         return amount
-
+    
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
+    
+    def get_rectangle(self):
+        centerpoint = self.cp
+        zaxis = rh.Vector3d(0,0,1)
+        plane = rh.Plane(centerpoint, zaxis)
+        return rh.Rectangle3d(plane, self.radius*2, self.radius*2)
 
 
 def run(pts, radii, max_iters, alpha, adjacencies):
@@ -127,9 +132,10 @@ def run(pts, radii, max_iters, alpha, adjacencies):
 
     print("process ran for {} iterations".format(i))
 
-    circles = []
+    geoms = []
+    
 
     for agent in agents:
-        circles.append(agent.get_circle())
+        geoms.append(agent.get_rectangle())
 
-    return circles, iters
+    return geoms, iters
