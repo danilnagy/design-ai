@@ -2,51 +2,109 @@
   {
     "name": "Entry",
     "area": 50,
-    "adjacency": ["Living"]
+    "adjacency": ["Living"],
+    "floor": [1]
   },
   {
     "name": "Living",
     "area": 200,
-    "adjacency": ["Entry", "Kitchen", "Hall"]
+    "adjacency": ["Entry", "Kitchen", "Hall"],
+    "floor": [1]
   },
   {
     "name": "Kitchen",
     "area": 150,
-    "adjacency": ["Living", "Dining"]
+    "adjacency": ["Living", "Dining"],
+    "floor": [1]
   },
   {
     "name": "Dining",
     "area": 120,
-    "adjacency": ["Kitchen", "Living"]
+    "adjacency": ["Kitchen", "Living"],
+    "floor": [1]
   },
   {
     "name": "Hall",
     "area": 80,
-    "adjacency": ["Living", "Bathroom", "Master Bed", "Bedroom 1", "Bedroom 2"]
+    "adjacency": ["Living", "Bathroom", "Master Bed", "Bedroom 1", "Bedroom 2"],
+    "floor": [1]
   },
   {
     "name": "Bathroom",
     "area": 80,
-    "adjacency": ["Hall"]
+    "adjacency": ["Hall"],
+    "floor": [1]
   },
   {
     "name": "Master Bed",
     "area": 150,
-    "adjacency": ["Hall", "Master Bath"]
+    "adjacency": ["Hall", "Master Bath"],
+    "floor": [1]
   },
   {
     "name": "Master Bath",
     "area": 80,
-    "adjacency": ["Master Bed"]
+    "adjacency": ["Master Bed"],
+    "floor": [1]
   },
   {
     "name": "Bedroom 1",
     "area": 100,
-    "adjacency": ["Hall"]
+    "adjacency": ["Hall"],
+    "floor": [1]
   },
   {
     "name": "Bedroom 2",
     "area": 100,
-    "adjacency": ["Hall"]
+    "adjacency": ["Hall"],
+    "floor": [1]
+  },
+  {
+    "name": "Stairs 1",
+    "area": 80,
+    "adjacency": ["Hall"],
+    "floor": [1,2]
+  },
+  {
+    "name": "Hall",
+    "area": 80,
+    "adjacency": ["Stairs 2", "Bedroom 3"],
+    "floor": [2]
+  },
+  {
+    "name": "Bedroom 3",
+    "area": 100,
+    "adjacency": ["Hall", "Bathroom"],
+    "floor": [2]
+  },
+  {
+    "name": "Bathroom",
+    "area": 100,
+    "adjacency": ["Hall", "Bedroom 3"],
+    "floor": [2]
+  },
+  {
+    "name": "Game Room",
+    "area": 300,
+    "adjacency": ["Hall"],
+    "floor": [2]
+  },
+  {
+    "name": "Stairs 2",
+    "area": 80,
+    "adjacency": ["Hall","Attic"],
+    "floor": [2,3]
+  },
+  {
+    "name": "Attic",
+    "area": 150,
+    "adjacency": ["Stairs 2", "Storage Room"],
+    "floor": [3]
+  },
+  {
+    "name": "Storage Room",
+    "area": 50,
+    "adjacency": ["Attic"],
+    "floor": [3]
   }
 ]
