@@ -2,7 +2,7 @@ import Rhino.Geometry as rh
 
 
 class Agent:
-
+    # add name and adjacency fileds to class, also add names and adjacencies input in ghpython component
     def __init__(self, pt, r, id, adjcs):
 
         self.cp = pt
@@ -93,16 +93,18 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
+# add function signatures : names, adjacencies, also need to add these to ghython code to call this fucntion
 def run(pts, radii, names, adjacencies, max_iters, alpha):
-
+    # test if json data 'adjacencies' sucessfuly input
     print(adjacencies)
+    # test if json data 'names' sucessfuly input
     print(names)
 
     agents = []
 
     for i, pt in enumerate(pts):
         print(names[i])
-
+        # add names[i] and adjacencies[names[i]] to build my_agent
         my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
@@ -128,6 +130,7 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
+                # adjust alpha/x to perfect ovelap ratio
                 total_amount += agent_1.collide(agent_2, alpha/2)
 
         if total_amount < .01:
