@@ -3,10 +3,12 @@ import Rhino.Geometry as rh
 
 class Agent:
 
-    def __init__(self, pt, r):
+    def __init__(self, pt, r, nam, adjcs):
 
         self.cp = pt
         self.radius = r
+        self.name = nam
+        self.adjacency = adjcs
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
@@ -91,19 +93,27 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha, adjacencies):
+def run(pts, radii, names, adjacencies, max_iters, alpha):
 
     print(adjacencies)
+    print(names)
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        print(names[i])
+
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
+    # for each agent in the list, add the its all adjacency agents as its neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        for j in range(len(agents)):
+
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -118,7 +128,7 @@ def run(pts, radii, max_iters, alpha, adjacencies):
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += agent_1.collide(agent_2, alpha/5)
+                total_amount += agent_1.collide(agent_2, alpha/2)
 
         if total_amount < .01:
             break
