@@ -3,11 +3,11 @@ import Rhino.Geometry as rh
 
 class Agent:
 
-    def __init__(self, pt, r, nam, adjcs):
+    def __init__(self, pt, r, id, adjcs):
 
         self.cp = pt
         self.radius = r
-        self.name = nam
+        self.name = id
         self.adjacency = adjcs
         self.neighbors = []
 
