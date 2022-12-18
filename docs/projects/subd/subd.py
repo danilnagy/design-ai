@@ -1,5 +1,13 @@
+import sys
 import Rhino.Geometry as rh
 from scriptcontext import doc
+import json
+
+# get local file
+gh_path = ghenv.Component.OnPingDocument().FilePath.split("\\")
+print "Local GH path: {}". format(gh_path)
+
+sys.path.append("/Users/lu/Desktop/subd/")
 
 # get absolute and angle tolerances from document
 abs_tol = doc.ModelAbsoluteTolerance
