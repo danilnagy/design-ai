@@ -138,14 +138,11 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
 
     print("process ran for {} iterations".format(i))
 
-    #init circles + names array
+    #init circles
     circles = []
-    names = []
 
     for agent in agents:
         circles.append(agent.get_circle())
         names.append(agent.adjacency)
         
-    print(names)
-
-    return circles, iters, names
+    return circles, iters
