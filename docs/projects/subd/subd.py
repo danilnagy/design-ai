@@ -14,7 +14,7 @@ abs_tol = doc.ModelAbsoluteTolerance
 ang_tol = doc.ModelAngleToleranceRadians
 
 # this function splits a curve c1 with another curve c2
-
+#hi
 
 def split_curve(c1, c2, close):
     # get intersection events between two curves
