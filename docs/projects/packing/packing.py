@@ -1,4 +1,6 @@
 import Rhino.Geometry as rh
+# add rhinoscriptsyntax
+import rhinoscriptsyntax as rs
 
 
 class Agent:
@@ -12,10 +14,38 @@ class Agent:
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
+
     def add_neighbor(self, other):
         self.neighbors.append(other)
 
+    # method for enticing the circle to boundry
+    def entice(self, boundry, alpha):
+        param = rs.CurveClosestPoint(boundry, self.cp)
+        # print(param)
+        closept = rs.EvaluateCurve(boundry, param)
+        rs.AddPoint(closept)
+
+        d = self.cp.DistanceTo(closept)
+
+        d = d - self.radius
+        # print(d)
+
+        pt_1 = closept
+        pt_2 = self.cp
+        # get vector from self to closept
+        v = pt_2 - pt_1
+
+        # change vector magnitude to 1
+        v.Unitize()
+
+        v *= -d*alpha
+
+        # move other object
+        t = rh.Transform.Translation(v)
+        pt_2.Transform(t)
+
     # method for checking distance to other room object and moving apart if they are overlapping
+
     def collide(self, other, alpha):
 
         d = self.cp.DistanceTo(other.cp)
@@ -94,7 +124,7 @@ class Agent:
 
 
 # add function signatures : names, adjacencies, also need to add these to ghython code to call this fucntion
-def run(pts, radii, names, adjacencies, max_iters, alpha):
+def run(pts, radii, names, adjacencies, max_iters, alpha, boundry):
     # test if json data 'adjacencies' sucessfuly input
     print(adjacencies)
     # test if json data 'names' sucessfuly input
@@ -105,8 +135,10 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
     for i, pt in enumerate(pts):
         print(names[i])
         # add names[i] and adjacencies[names[i]] to build my_agent
-        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]],)
         agents.append(my_agent)
+
+    boundr1 = boundry
 
     # for each agent in the list, add the its all adjacency agents as its neighbor
     for i in range(len(agents)):
@@ -126,12 +158,16 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
             # cluster to all agent's neighbors
             for agent_2 in agent_1.neighbors:
                 total_amount += agent_1.cluster(agent_2, alpha)
+                # do the push
+                agent_1.entice(boundry, alpha/20)
 
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
                 # adjust alpha/x to perfect ovelap ratio
-                total_amount += agent_1.collide(agent_2, alpha/2)
+                total_amount += agent_1.collide(agent_2, alpha)
+                # do the push
+                agent_1.entice(boundry, alpha/20)
 
         if total_amount < .01:
             break
@@ -145,4 +181,4 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
     for agent in agents:
         circles.append(agent.get_circle())
 
-    return circles, iters
+    return circles, iters, boundr1
