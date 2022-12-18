@@ -111,7 +111,7 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
         
             if agents[j].name in agents[i].adjacency:
                 # print(agents[j].name)
-                print(agents[i].adjacency)
+                # print(agents[i].adjacency)
                 agents[i].add_neighbor(agents[j])
             else:
                 continue
@@ -138,9 +138,14 @@ def run(pts, radii, names, adjacencies, max_iters, alpha):
 
     print("process ran for {} iterations".format(i))
 
+    #init circles + names array
     circles = []
+    names = []
 
     for agent in agents:
         circles.append(agent.get_circle())
+        names.append(agent.adjacency)
+        
+    print(names)
 
-    return circles, iters
+    return circles, iters, names
