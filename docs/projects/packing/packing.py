@@ -1,16 +1,18 @@
 import Rhino.Geometry as rh
 
-
 class Agent:
 
-    def __init__(self, pt, r):
+    def __init__(self, pt, r, names, adjacencies):
 
         self.cp = pt
         self.radius = r
+        self.name = names
+        self.adjacency = adjacencies
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
+
         self.neighbors.append(other)
 
     # method for checking distance to other room object and moving apart if they are overlapping
@@ -90,18 +92,29 @@ class Agent:
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
 
-
-def run(pts, radii, max_iters, alpha):
-
+# these must match gh python component ins
+def run(pts, radii, names, adjacencies, max_iters, alpha):
+    
+    # print(adjacency)
+    # print(adjacencies)
     agents = []
 
-    for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
-        agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
+    for i, pt in enumerate(pts):
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[i])
+        agents.append(my_agent)
+        
+    # for each agent in the list, add any agent referenced in the adjacency list as neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        
+        for j in range(len(agents)-1):
+        
+            if agents[j].name in agents[i].adjacency:
+                # print(agents[j].name)
+                print(agents[i].adjacency)
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -118,7 +131,7 @@ def run(pts, radii, max_iters, alpha):
                 # add extra multiplier to decrease effect of cluster
                 total_amount += agent_1.collide(agent_2, alpha/5)
 
-        if total_amount < .01:
+        if total_amount < .001:
             break
 
     iters = i
