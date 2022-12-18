@@ -1,0 +1,101 @@
+#85 - np2837
+
+import Rhino.Geometry as rh
+
+class Agent:
+    def __init__(self, pt, r):
+        self.cp = pt
+        self.radius = r
+        self.neighbors = []
+        self.adjacency = ad
+
+    def add_neighbor(self, other):
+        self.neighbors.append(other)
+
+    def collide(self, other, alpha):
+        d = self.cp.DistanceTo(other.cp)
+        count = 0
+
+        if d < self.radius + other.radius:
+            pt_2 = other.cp
+            pt_1 = self.cp
+
+            v = pt_2 - pt_1
+            v.Unitize()
+            v *= (self.radius + other.radius - d) / 2
+            v *= alpha
+
+            count = v.Length
+
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_1.Transform(t)
+
+        return count
+
+    def cluster(self, other, alpha):
+
+        d = other.cp.DistanceTo(self.cp)
+        count = 0
+
+        if d > self.radius + other.radius:
+            pt_2 = self.cp
+            pt_1 = other.cp
+
+            v = pt_2 - pt_1
+            v.Unitize()
+            v *= (d-(self.radius + other.radius)) / 2
+            v *= alpha
+
+            count = v.Length
+
+            v.Reverse()
+            t = rh.Transform.Translation(v)
+            pt_2.Transform(t)
+
+        return count
+
+    def get_circle(self):
+        return rh.Circle(self.cp, self.radius)
+
+def run(pts, radii, names, adjacencies, max_iters, alpha):
+    print(adjacencies)
+    print(names)
+
+    agents = []
+
+    for i, pt in enumerate(pts):
+        print(names[i])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[i])
+        agents.append(my_agent)
+
+    for i in range(len(agents)):
+        for j in range(len(agents)):
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
+
+for i in range(max_iters):
+    
+    total_count = 0
+    
+        for j, agent_1 in enumerate(agents):
+
+            for agent_2 in agent_1.neighbors:
+                total_count += agent_1.cluster(agent_2, alpha)
+
+            for agent_2 in agents[j+1:]:
+                total_count += agent_1.collide(agent_2, alpha/2)
+
+        if total_count < .01:
+            break
+
+    iters = i
+
+circles = []
+
+for agent in agents:
+    circles.append(agent.get_circle())
