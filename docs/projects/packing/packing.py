@@ -2,7 +2,6 @@ import Rhino.Geometry as rh
 
 class Agent:
 
-    # Update _init_ function to reference room and adjacency for later use in passing parsed JSON data into behavioral functions
     def __init__(self, pt, r, ro, adj):
         self.cp = pt
         self.radius = r
@@ -10,11 +9,9 @@ class Agent:
         self.adjacency = adj
         self.neighbors = []
 
-    # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
         self.neighbors.append(other)
 
-    # method for checking distance to other room object and moving apart if they are overlapping
     def collide(self, other, alpha):
         d = self.cp.DistanceTo(other.cp)
         amount = 0
@@ -41,7 +38,6 @@ class Agent:
             pt_1.Transform(t)
         return amount
 
-    # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other, alpha):
         d = self.cp.DistanceTo(other.cp)
         amount = 0
@@ -72,15 +68,13 @@ class Agent:
 
 
 def run(pts, radii, rooms, adjacencies, max_iters, alpha):
-    # TEST
-    #print(adjacencies[names])
+
     agents = []
 
     for i, pt in enumerate(pts):
         my_agent = Agent(pt, radii[i], rooms[i], adjacencies[i])
         agents.append(my_agent)
 
-    # Iterate over each agent in the list, check if it appears in the next items adjacency values, and add as a neighbor if so
     for i in range(len(agents)):
         # Second loop to iterate over all instances of agent
         for j in range(len(agents)):
