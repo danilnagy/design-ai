@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Gallery
-nav_order: 6
+nav_order: 7
 ---
 
 # Gallery
@@ -9,6 +9,7 @@ nav_order: 6
 ## How to contribute
 
 URL's:
+
 - https://design-ai.net/gallery/`my-id` - merged (production)
 - https://`my-github-handle`.github.io/design-ai/gallery/`my-id` - personal (develop)
 
