@@ -5,6 +5,24 @@ from scriptcontext import doc
 abs_tol = doc.ModelAbsoluteTolerance
 ang_tol = doc.ModelAngleToleranceRadians
 
+# this function finds the rotation of bounding shape
+# used within Rhino Python when curve containers are identified
+
+def find_rotation(curve):
+    # find seg of bounding shape
+    # then create bounding box using seg as the hypotenuse
+    # opp_pt location based on bounding box for math.asin() method below
+    seg = rh.Line(curve.PointAtStart, curve.PointAt(0)).ToNurbsCurve()
+    bb = seg.GetBoundingBox(True)
+    opp_pt = rh.Point3d(bb.Max.X, bb.Min.Y, 0.0)
+
+    # find hypotenuse length and opposite length
+    h = seg.PointAtStart.DistanceTo(curve.PointAt(0))
+    o = seg.PointAtStart.DistanceTo(opp_pt)
+
+    # return the radian rotation of bounding shape for use in following functions
+    return math.radians(360) - (math.asin(o/h))
+
 # this function splits a curve c1 with another curve c2
 
 
@@ -74,7 +92,7 @@ def split_curve(c1, c2, close):
 # this function splits a space with two parameters
 
 
-def split_space(curve, dir, param):
+def split_space(curve, dir, param, rad):
 
     # get the bounding box of the curve
     bb = curve.GetBoundingBox(True)
@@ -112,18 +130,32 @@ def split_space(curve, dir, param):
     # create the split line and convert it to a Nurbs Curve
     # (this is necessary to make the splitting work in the next function)
     split_line = rh.Line(new_pt_1, new_pt_2).ToNurbsCurve()
+    
+    # duplicate split_line curves for rotation option
+    split_line_dup = rh.PolylineCurve.Duplicate(split_line)
+    rh.PolylineCurve.Rotate(
+        split_line_dup,
+        float(rad),
+        rh.Vector3d.ZAxis,
+        split_line.PointAtStart
+        )
 
     # use the split_curve() function to split the boundary with the split line
     parts = split_curve(curve, split_line, True)
+    parts_rotated = split_curve(curve, split_line_dup, True)
 
     # return the curves resulting from the split
-    return parts
+    # added conditional statements for output of definition based on rotation
+    if rotate == True:
+        return parts_rotated
+    else:
+        return parts
 
 # this function calls the split_space() function recursively
 # to continuosly split an input curve into parts based on a set of parameters
 
 
-def split_recursively(curves, dirs, params):
+def split_recursively(curves, dirs, params, rad):
 
     # if there are no more parameters in the list, return the input curves
     if len(dirs) <= 0 or len(params) <= 0:
@@ -135,7 +167,7 @@ def split_recursively(curves, dirs, params):
     curve = curves.pop(0)
 
     # split the curve and add the results to the curves list
-    curves += split_space(curve, dir, param)
+    curves += split_space(curve, dir, param, rad)
 
     # run the split_recursively() function again with the updated curves list and the remaining parameters
-    return split_recursively(curves, dirs, params)
+    return split_recursively(curves, dirs, params, rad)
