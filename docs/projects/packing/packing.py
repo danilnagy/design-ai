@@ -1,13 +1,16 @@
+#85_hw2896
 import Rhino.Geometry as rh
 
 
 class Agent:
 
-    def __init__(self, pt, r):
+    def __init__(self, pt, r, name, adj):
 
         self.cp = pt
         self.radius = r
         self.neighbors = []
+        self.name = name
+        self.adjacency = adj
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
@@ -94,16 +97,23 @@ class Agent:
 def run(pts, radii, max_iters, alpha, adjacencies):
 
     print(adjacencies)
-
+    #print(names)
+    names = list(adjacencies.keys())
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        
+        my_agent = Agent(pt,radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
     # for each agent in the list, add the previous agent as its neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        
+        for j in range(len(agents)):
+            if agents[j-1].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j-1])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -128,8 +138,11 @@ def run(pts, radii, max_iters, alpha, adjacencies):
     print("process ran for {} iterations".format(i))
 
     circles = []
+    names = []
 
     for agent in agents:
         circles.append(agent.get_circle())
+        names.append(agent.name)
 
-    return circles, iters
+
+    return circles, iters, names
