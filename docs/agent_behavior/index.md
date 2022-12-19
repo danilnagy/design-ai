@@ -166,8 +166,38 @@ class Agent:
 
     # method for checking distance to other instance and moving closer if they are not touching
     def cluster(self, other):
+        a = 0
 
-        pass
+        d = other.cp.DistanceTo(other.cp)
+        
+        if d > self.radius + other.radius:
+            pt_2 = self.cp
+            pt_1 = other.cp
+
+        # get vector from self to other
+        v = pt_2 - pt_1
+
+        # change vector magnitude to 1
+        v.Unitize()
+        # set magnitude to half the overlap distance
+        v *= (self.radius + other.radius - d) / 2
+        # multiply by alpha parameter to control 
+        # amount of movement at each time step
+        v *= alpha
+
+        a = v.Length
+
+        # move other object
+        t = rh.Transform.Translation(v)
+        pt_2.Transform(t)
+
+        # reverse vector and move self same amount
+        # in opposite direction
+        v.Reverse()
+        t = rh.Transform.Translation(v)
+        pt_1.Transform(t)
+
+        return a
 
     def get_circle(self):
         return rh.Circle(self.cp, self.radius)
@@ -183,15 +213,20 @@ for i in range(len(agents)):
     agents[i].add_neighbor(agents[i-1])
 
 for i in range(max_iters):
+    total_amount = 0
+
     for j,agent_1 in enumerate(agents):
 
         # cluster to all agent's neighbors
         for agent_2 in agent_1.neighbors:
-            agent_1.cluster(agent_2)
+            total_amount += agent_1.cluster(agent_2)
 
         # collide with all agents after agent in list
         for agent_2 in agents[j+1:]:
-            agent_1.collide(agent_2)
+            total_amount += agent_1.collide(agent_2)
+
+    if total_amount < .01:
+        break
 
 circles = []
 
