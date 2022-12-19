@@ -2,11 +2,13 @@ import Rhino.Geometry as rh
 
 
 class Agent:
-
-    def __init__(self, pt, r):
+    # add name and adjacency fileds to class, also add names and adjacencies input in ghpython component
+    def __init__(self, pt, r, id, adjcs):
 
         self.cp = pt
         self.radius = r
+        self.name = id
+        self.adjacency = adjcs
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
@@ -91,19 +93,29 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha, adjacencies):
-
+# add function signatures : names, adjacencies, also need to add these to ghython code to call this fucntion
+def run(pts, radii, names, adjacencies, max_iters, alpha):
+    # test if json data 'adjacencies' sucessfuly input
     print(adjacencies)
+    # test if json data 'names' sucessfuly input
+    print(names)
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        print(names[i])
+        # add names[i] and adjacencies[names[i]] to build my_agent
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
+    # for each agent in the list, add the its all adjacency agents as its neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        for j in range(len(agents)):
+
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -118,7 +130,8 @@ def run(pts, radii, max_iters, alpha, adjacencies):
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += agent_1.collide(agent_2, alpha/5)
+                # adjust alpha/x to perfect ovelap ratio
+                total_amount += agent_1.collide(agent_2, alpha/2)
 
         if total_amount < .01:
             break
