@@ -124,7 +124,7 @@ def run(pts, radii, max_iters, alpha, adjacencies, names):
 
             # cluster to all agent's neighbors
             for agent_2 in agent_1.neighbors:
-                total_amount += agent_1.cluster(agent_2, alpha)
+                total_amount += agent_1.cluster(agent_2, alpha/2)
 
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
