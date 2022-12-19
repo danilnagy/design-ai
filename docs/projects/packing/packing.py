@@ -27,9 +27,6 @@ class Agent:
 
         d = self.cp.DistanceTo(closept)
 
-        d = d - self.radius
-        # print(d)
-
         pt_1 = closept
         pt_2 = self.cp
         # get vector from self to closept
@@ -38,7 +35,24 @@ class Agent:
         # change vector magnitude to 1
         v.Unitize()
 
-        v *= -d*alpha
+        # print(d)
+
+        # sotre the result of checking if the point inside the boundry, insde = 1, outside = 0, on = 2
+        situation = rs.PointInPlanarClosedCurve(self.cp, boundry)
+        # if point insde boundry
+        if situation == "1":
+            # if d > radius, push to point to boundry
+            if d > self.radius:
+                v *= -d*alpha
+            # if d <= radisu, pull back point against boundry
+            else:
+                v *= d*alpha
+
+        # if point outsde boundry, only push to point to boundry
+        if situation == "0":
+            v *= d*alpha
+
+        # if point on boudry do nothing, because the situtation will change due to collide and cluster function
 
         # move other object
         t = rh.Transform.Translation(v)
@@ -154,20 +168,23 @@ def run(pts, radii, names, adjacencies, max_iters, alpha, boundry):
         total_amount = 0
 
         for j, agent_1 in enumerate(agents):
-
-            # cluster to all agent's neighbors
+            # entice to all agent's
+            agent_1.entice(boundry, alpha/10)
+            # cluster and entice to all agent's neighbors
             for agent_2 in agent_1.neighbors:
+                # cluster to all agent's neighbors
                 total_amount += agent_1.cluster(agent_2, alpha)
-                # do the push
-                agent_1.entice(boundry, alpha/20)
+                # entice to all agent's neighbors
+                agent_1.entice(boundry, alpha/10)
 
-            # collide with all agents after agent in list
+            # collide and entice with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
                 # adjust alpha/x to perfect ovelap ratio
+                # collide with all agents after agent in list
                 total_amount += agent_1.collide(agent_2, alpha)
-                # do the push
-                agent_1.entice(boundry, alpha/20)
+                # entice with all agents after agent in list
+                agent_1.entice(boundry, alpha/10)
 
         if total_amount < .01:
             break
