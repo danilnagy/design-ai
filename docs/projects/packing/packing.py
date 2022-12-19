@@ -3,10 +3,12 @@ import Rhino.Geometry as rh
 
 class Agent:
 
-    def __init__(self, pt, r):
+    def __init__(self, pt, r, name, adj):
 
         self.cp = pt
         self.radius = r
+        self.name = name
+        self.adjacencies = adj
         self.neighbors = []
 
     # method for adding another instance to a list of neighbors
@@ -91,18 +93,30 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha):
+def run(pts, radii, max_iters, alpha, names, adjacencies):
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
-    for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+    # OLD for each agent in the list, add the previous agent as its neighbor
 
+    # FINAL: use adjacency information to set the neighbors
+
+    for i in range(len(agents)):
+
+        for j in range(len(agents[i].adjacencies)):
+            adj_1 = agents[i].adjacencies[j]
+
+            ## add neighbor agent where adjacency is specified - how to query agent list for that? 
+            for agent in agents:
+
+                if agent.name == adj_1:
+
+                    agents[i].add_neighbor(agent)
+            
     for i in range(max_iters):
 
         total_amount = 0
