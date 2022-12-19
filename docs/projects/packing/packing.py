@@ -2,7 +2,7 @@ import Rhino.Geometry as rh
 
 
 class Agent:
-    # add name and adjacency fileds to class, also add names and adjacencies input in ghpython component
+    # add name and adjacency fileds to class, also add names and adjacencies input in ghpython components
     def __init__(self, pt, r, id, adjcs):
 
         self.cp = pt
@@ -11,7 +11,7 @@ class Agent:
         self.adjacency = adjcs
         self.neighbors = []
 
-    # method for adding another instance to a list of neighbors
+    # method for adding another instance to a list of neighbors 
     def add_neighbor(self, other):
         self.neighbors.append(other)
 
