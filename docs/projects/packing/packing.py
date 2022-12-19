@@ -1,13 +1,19 @@
 import Rhino.Geometry as rh
 
+# add names to gh python component as a list
+
 
 class Agent:
 
-    def __init__(self, pt, r):
+    # adding room name and adjacency attributes to agents
+
+    def __init__(self, pt, r, name, adj):
 
         self.cp = pt
         self.radius = r
         self.neighbors = []
+        self.name = name
+        self.adjacency = adj
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
@@ -91,19 +97,26 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha, adjacencies):
+def run(pts, radii, max_iters, alpha, names, adjacencies):
 
-    print(adjacencies)
+    print(names)
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        print(names[i])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]])
         agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
+        print(my_agent)
+
+    # for each agent in the list, add agent that fullfills adjacency requirment as its new neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        for j in range(len(agents)):
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
@@ -118,7 +131,7 @@ def run(pts, radii, max_iters, alpha, adjacencies):
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += agent_1.collide(agent_2, alpha/5)
+                total_amount += agent_1.collide(agent_2, alpha/1.25)
 
         if total_amount < .01:
             break
