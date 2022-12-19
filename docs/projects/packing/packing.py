@@ -1,15 +1,29 @@
 import Rhino.Geometry as rh
+import math
+
+# using gene pool, add new list with values range from 0.5 tp 2.0. values in this list represent width
+# to height ratios for rectangular spaces
 
 
 class Agent:
 
-    def __init__(self, pt, r):
+    # define new rectangles with area, width, and height
+    def __init__(self, pt, a, ratio):
 
         self.cp = pt
-        self.radius = r
+        self.area = a
         self.neighbors = []
+        self.ratio = ratio
+        self.ZVector = rh.Vector3d(0, 0, 1)
+        self.plane = rh.Plane(pt, self.ZVector)
+        self.width = ratio * math.sqrt(a)
+        self.height = self.area / self.width
+        self.rect = rh.Rectangle3d(self.plane, rh.Point3d(self.cp.X + 0.5 * self.width,
+                                                          self.cp.Y + 0.5 * self.height, 0), rh.Point3d(self.cp.X - 0.5 * self.width,
+                                                                                                        self.cp.Y - 0.5 * self.height, 0))
 
     # method for adding another instance to a list of neighbors
+
     def add_neighbor(self, other):
         self.neighbors.append(other)
 
@@ -18,9 +32,22 @@ class Agent:
 
         d = self.cp.DistanceTo(other.cp)
 
+        other.rect = rh.Rectangle3d(self.plane, rh.Point3d(other.cp.X + 0.5 * other.width,
+                                                           other.cp.Y + 0.5 * other.height, 0), rh.Point3d(other.cp.X - 0.5 * other.width,
+                                                                                                           other.cp.Y - 0.5 * other.height, 0))
+
+        # find shortest distance between two rectangles while they are just touching each other
+
+        selfDistToFarestBoundaryPoint = self.cp.DistanceTo(
+            self.rect.ClosestPoint(other.cp))
+        otherDistToFarestBoundaryPoint = other.cp.DistanceTo(
+            other.rect.ClosestPoint(self.cp))
+
         amount = 0
 
-        if d < self.radius + other.radius:
+        # update collide logic based on shortest distance between two rectangles
+
+        if d < selfDistToFarestBoundaryPoint + otherDistToFarestBoundaryPoint:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -31,7 +58,8 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (self.radius + other.radius - d) / 2
+            v *= (selfDistToFarestBoundaryPoint +
+                  otherDistToFarestBoundaryPoint - d) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
@@ -55,9 +83,22 @@ class Agent:
 
         d = self.cp.DistanceTo(other.cp)
 
+        other.rect = rh.Rectangle3d(self.plane, rh.Point3d(other.cp.X + 0.5 * other.width,
+                                                           other.cp.Y + 0.5 * other.height, 0), rh.Point3d(other.cp.X - 0.5 * other.width,
+                                                                                                           other.cp.Y - 0.5 * other.height, 0))
+
+        # find shortest distance between two rectangles while they are just touching each other
+
+        selfDistToFarestBoundaryPoint = self.cp.DistanceTo(
+            self.rect.ClosestPoint(other.cp))
+        otherDistToFarestBoundaryPoint = other.cp.DistanceTo(
+            other.rect.ClosestPoint(self.cp))
+
         amount = 0
 
-        if d > self.radius + other.radius:
+        # update cluster logic based on shortest distance between two rectangles
+
+        if d > selfDistToFarestBoundaryPoint + otherDistToFarestBoundaryPoint:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -68,7 +109,8 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (d - (self.radius + other.radius)) / 2
+            v *= (d - (selfDistToFarestBoundaryPoint +
+                  otherDistToFarestBoundaryPoint)) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
@@ -87,18 +129,25 @@ class Agent:
 
         return amount
 
-    def get_circle(self):
-        return rh.Circle(self.cp, self.radius)
+# get new rectangles using two farest points
+
+    def get_rect(self):
+        a = rh.Point3d(self.cp.X + 0.5 * self.width,
+                       self.cp.Y + 0.5 * self.height, 0)
+        b = rh.Point3d(self.cp.X - 0.5 * self.width,
+                       self.cp.Y - 0.5 * self.height, 0)
+        return rh.Rectangle3d(self.plane, a, b)
 
 
-def run(pts, radii, max_iters, alpha, adjacencies):
+def run(pts, a, max_iters, alpha, adjacencies, ratio):
 
     print(adjacencies)
+    print(ratio)
 
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i])
+        my_agent = Agent(pt, a[i], ratio[i])
         agents.append(my_agent)
 
     # for each agent in the list, add the previous agent as its neighbor
@@ -127,9 +176,9 @@ def run(pts, radii, max_iters, alpha, adjacencies):
 
     print("process ran for {} iterations".format(i))
 
-    circles = []
+    rectangles = []
 
     for agent in agents:
-        circles.append(agent.get_circle())
+        rectangles.append(agent.get_rect())
 
-    return circles, iters
+    return rectangles, iters
