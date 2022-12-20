@@ -205,7 +205,7 @@ def run(pts, radii, max_iters, alpha, adjacencies, b):
             # collide with all agents after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += agent_1.collide(agent_2, alpha/5)
+                total_amount += agent_1.collide(agent_2, alpha/20)
 
         if total_amount < .01:
             break
@@ -219,7 +219,7 @@ def run(pts, radii, max_iters, alpha, adjacencies, b):
             # collide with boundary after agent in list
             for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += agent_1.collideboundary(agent_2, alpha/5)
+                total_amount += agent_1.collideboundary(agent_2, alpha/20)
 
         if total_amount < .01:
             break
