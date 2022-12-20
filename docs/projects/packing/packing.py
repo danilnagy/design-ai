@@ -1,6 +1,7 @@
 import Rhino.Geometry as rh
 import math
 
+# connect "names" from json file to gh python component as a list
 # using gene pool, add new list with values range from 0.5 tp 2.0. values in this list represent width
 # to height ratios for rectangular spaces
 
@@ -8,7 +9,8 @@ import math
 class Agent:
 
     # define new rectangles with area, width, and height
-    def __init__(self, pt, a, ratio):
+    # add room name and adjacency attributes to agent
+    def __init__(self, pt, a, adj, ratio, name):
 
         self.cp = pt
         self.area = a
@@ -21,6 +23,8 @@ class Agent:
         self.rect = rh.Rectangle3d(self.plane, rh.Point3d(self.cp.X + 0.5 * self.width,
                                                           self.cp.Y + 0.5 * self.height, 0), rh.Point3d(self.cp.X - 0.5 * self.width,
                                                                                                         self.cp.Y - 0.5 * self.height, 0))
+        self.adjacency = adj
+        self.name = name
 
     # method for adding another instance to a list of neighbors
 
@@ -139,7 +143,7 @@ class Agent:
         return rh.Rectangle3d(self.plane, a, b)
 
 
-def run(pts, a, max_iters, alpha, adjacencies, ratio):
+def run(pts, a, max_iters, alpha, adjacencies, ratio, names):
 
     print(adjacencies)
     print(ratio)
@@ -147,12 +151,16 @@ def run(pts, a, max_iters, alpha, adjacencies, ratio):
     agents = []
 
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, a[i], ratio[i])
+        my_agent = Agent(pt, a[i], adjacencies[names[i]], ratio[i], names[i])
         agents.append(my_agent)
 
-    # for each agent in the list, add the previous agent as its neighbor
+    # # for each agent in the list, add agent that fullfills adjacency requirment as its new neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        for j in range(len(agents)):
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
