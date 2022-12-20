@@ -1,11 +1,10 @@
 import Rhino.Geometry as rh
 
 
-class Room:
+class Agent:
 
-    def __init__(self, room, pt, r):
+    def __init__(self, pt, r):
 
-        self.name = room
         self.cp = pt
         self.radius = r
         self.neighbors = []
@@ -92,35 +91,34 @@ class Room:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(rooms, pts, radii, max_iters, alpha, adjacencies):
-    print (rooms)
+def run(pts, radii, max_iters, alpha, adjacencies):
+
     print(adjacencies)
 
-    room_list = []
+    agents = []
 
     for i, pt in enumerate(pts):
-        my_room = Room(rooms[i], pt, radii[i])
-        room_list.append(my_room)
+        my_agent = Agent(pt, radii[i])
+        agents.append(my_agent)
 
     # for each agent in the list, add the previous agent as its neighbor
-    for i in range(len(room_list)):
-        # agents[i].add_neighbor(agents[i-1])
-        room_list[i].add_neighbor(adjacencies(i))
+    for i in range(len(agents)):
+        agents[i].add_neighbor(agents[i-1])
 
     for i in range(max_iters):
 
         total_amount = 0
 
-        for j, room_1 in enumerate(room_list):
+        for j, agent_1 in enumerate(agents):
 
             # cluster to all agent's neighbors
-            for room_2 in room_1.neighbors:
-                total_amount += room_1.cluster(room_2, alpha)
+            for agent_2 in agent_1.neighbors:
+                total_amount += agent_1.cluster(agent_2, alpha)
 
             # collide with all agents after agent in list
-            for room_2 in room_list[j+1:]:
+            for agent_2 in agents[j+1:]:
                 # add extra multiplier to decrease effect of cluster
-                total_amount += room_1.collide(room_2, alpha/5)
+                total_amount += agent_1.collide(agent_2, alpha/5)
 
         if total_amount < .01:
             break
@@ -131,7 +129,7 @@ def run(rooms, pts, radii, max_iters, alpha, adjacencies):
 
     circles = []
 
-    for my_room in room_list:
-        circles.append(my_room.get_circle())
+    for agent in agents:
+        circles.append(agent.get_circle())
 
     return circles, iters
