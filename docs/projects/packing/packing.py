@@ -2,18 +2,21 @@ import Rhino.Geometry as rh
 
 # set up geometry pipeline GH component for the boundary and add new varible to GH ptyhon
 # component with its type hint set to "polyline". draw a randown polyline as "boundary"(b)
+# connect "names" from json file to gh python component as a list
 
 
 class Agent:
 
     # add boundry attriibute to agent
 
-    def __init__(self, pt, r, b):
+    def __init__(self, pt, r, name, adj, b):
 
         self.cp = pt
         self.radius = r
         self.neighbors = []
         self.boundary = b
+        self.name = name
+        self.adjacency = adj
 
     # method for adding another instance to a list of neighbors
     def add_neighbor(self, other):
@@ -178,19 +181,26 @@ class Agent:
         return rh.Circle(self.cp, self.radius)
 
 
-def run(pts, radii, max_iters, alpha, adjacencies, b):
-
-    print(adjacencies)
+def run(pts, radii, max_iters, alpha, names, adjacencies, b):
 
     agents = []
 
+    print(names[0])
+    print(adjacencies["Hall"])
+
+    # for each agent in the list, add agent that fullfills adjacency requirment as its new neighbor
     for i, pt in enumerate(pts):
-        my_agent = Agent(pt, radii[i], b)
+        print(names[i])
+        my_agent = Agent(pt, radii[i], names[i], adjacencies[names[i]], b)
         agents.append(my_agent)
 
     # for each agent in the list, add the previous agent as its neighbor
     for i in range(len(agents)):
-        agents[i].add_neighbor(agents[i-1])
+        for j in range(len(agents)):
+            if agents[j].name in agents[i].adjacency:
+                agents[i].add_neighbor(agents[j])
+            else:
+                continue
 
     for i in range(max_iters):
 
