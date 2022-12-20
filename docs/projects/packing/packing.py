@@ -42,16 +42,22 @@ class Agent:
 
         # find shortest distance between two rectangles while they are just touching each other
 
-        selfDistToFarestBoundaryPoint = self.cp.DistanceTo(
-            self.rect.ClosestPoint(other.cp))
-        otherDistToFarestBoundaryPoint = other.cp.DistanceTo(
-            other.rect.ClosestPoint(self.cp))
+        pt_intersectOther = rh.PolylineCurve([self.cp, other.cp]).ClosestPoints(
+            other.rect.ToNurbsCurve())[1]
+
+        pt_intersectSelf = rh.PolylineCurve([self.cp, other.cp]).ClosestPoints(
+            self.rect.ToNurbsCurve())[1]
+
+        selfDistToIntersectBoundaryPoint = self.cp.DistanceTo(
+            pt_intersectSelf)
+        otherDistToIntersectBoundaryPoint = other.cp.DistanceTo(
+            pt_intersectOther)
 
         amount = 0
 
         # update collide logic based on shortest distance between two rectangles
 
-        if d < selfDistToFarestBoundaryPoint + otherDistToFarestBoundaryPoint:
+        if d < selfDistToIntersectBoundaryPoint + otherDistToIntersectBoundaryPoint:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -62,8 +68,8 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (selfDistToFarestBoundaryPoint +
-                  otherDistToFarestBoundaryPoint - d) / 2
+            v *= (selfDistToIntersectBoundaryPoint +
+                  otherDistToIntersectBoundaryPoint - d) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
@@ -93,16 +99,22 @@ class Agent:
 
         # find shortest distance between two rectangles while they are just touching each other
 
-        selfDistToFarestBoundaryPoint = self.cp.DistanceTo(
-            self.rect.ClosestPoint(other.cp))
-        otherDistToFarestBoundaryPoint = other.cp.DistanceTo(
-            other.rect.ClosestPoint(self.cp))
+        pt_intersectOther = rh.PolylineCurve([self.cp, other.cp]).ClosestPoints(
+            other.rect.ToNurbsCurve())[1]
+
+        pt_intersectSelf = rh.PolylineCurve([self.cp, other.cp]).ClosestPoints(
+            self.rect.ToNurbsCurve())[1]
+
+        selfDistToIntersectBoundaryPoint = self.cp.DistanceTo(
+            pt_intersectSelf)
+        otherDistToIntersectBoundaryPoint = other.cp.DistanceTo(
+            pt_intersectOther)
 
         amount = 0
 
         # update cluster logic based on shortest distance between two rectangles
 
-        if d > selfDistToFarestBoundaryPoint + otherDistToFarestBoundaryPoint:
+        if d > selfDistToIntersectBoundaryPoint + otherDistToIntersectBoundaryPoint:
 
             pt_2 = other.cp
             pt_1 = self.cp
@@ -113,8 +125,8 @@ class Agent:
             # change vector magnitude to 1
             v.Unitize()
             # set magnitude to half the overlap distance
-            v *= (d - (selfDistToFarestBoundaryPoint +
-                  otherDistToFarestBoundaryPoint)) / 2
+            v *= (d - (selfDistToIntersectBoundaryPoint +
+                  otherDistToIntersectBoundaryPoint)) / 2
             # multiply by alpha parameter to control
             # amount of movement at each time step
             v *= alpha
