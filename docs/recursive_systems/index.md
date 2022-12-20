@@ -302,6 +302,122 @@ def grow(pts, params):
 branches = grow([rh.Point3d(0,0,0)], params)
 ```
 
+challenge 2
+
+```python
+
+import Rhino.Geometry as rh
+import math
+from scriptcontext import doc
+
+# get absolute and angle tolerances from document
+abs_tol = doc.ModelAbsoluteTolerance
+ang_tol = doc.ModelAngleToleranceRadians
+
+# this function splits a curve c1 with another curve c2
+def split_curve(c1, c2, close):
+    # get intersection events between two curves
+    inter = rh.Intersect.Intersection.CurveCurve(c1, c2, abs_tol, abs_tol)
+    
+    p = [inter[i].ParameterA for i in range(inter.Count)]
+    
+
+    if len(p) > 2:
+        
+        # loop over all parameters
+        for i in range(len(p)):
+            
+            # get the points at the previous and current parameters in the list
+            pt1 = c1.PointAt(p[i-1])
+            pt2 = c1.PointAt(p[i])
+            
+            # get the line between the two points
+            l = rh.Line(pt1, pt2).ToNurbsCurve()
+            
+            # check how many times the line intersects the boundary
+            inter = rh.Intersect.Intersection.CurveCurve(c1, l.ToNurbsCurve(), abs_tol, abs_tol)
+            
+            # if there are only two intersections, return the two parameters 
+            # and break out of loop
+            if len(inter) == 2:
+                p = [p[i-1], p[i]]
+                break
+    
+    # split the curve by the parameters
+    pieces = c1.Split(p)
+    
+    # create a new list to store the final curves
+    curves = []
+    
+    # iterate over pieces
+    for piece in pieces:
+        # if closed curves were requested and the curve is not closed
+        if close == True and not piece.IsClosed:
+            # create a new line to close the curve, join them together, and add the result to curves list
+            line = rh.Line(piece.PointAtStart, piece.PointAtEnd).ToNurbsCurve()
+            curves += rh.NurbsCurve.JoinCurves([piece, line])
+        else:
+            # otherwise add the original piece to the curves list
+            curves.append(piece)
+    
+    # return the final curves
+    return curves
+
+# this function splits a space with two parameters
+def split_space(curve, rps):
+    
+    # get the bounding box of the curve
+    bb = curve.GetBoundingBox(True)
+    # get the base point of the bounding box
+    base_pt = rh.Point3d(bb.Min.X, bb.Min.Y, 0.0)
+    
+    # get the x and y dimensions of the bounding box
+    x = bb.Max.X - bb.Min.X
+    y = bb.Max.Y - bb.Min.Y
+    
+    line = rh.Line(bb.Min, bb.Max)
+    
+    center_point = line.PointAt(0.5)
+    
+    print center_point
+    
+    t = rh.Transform.Rotation(rps* math.pi * 2, rh.Vector3d(0,0,1), center_point)
+    
+    line.Transform(t)
+
+    split_line = line.ToNurbsCurve()
+    
+    # use the split_curve() function to split the boundary with the split line
+    parts = split_curve(curve, split_line, True)
+    
+    # return the curves resulting from the split
+    return parts
+
+# this function calls the split_space() function recursively
+# to continuosly split an input curve into parts based on a set of parameters
+def split_recursively(curves, rps):
+    
+    # if there are no more parameters in the list, return the input curves
+    if len(rps) <= 0:
+        return curves
+    
+    # get the first parameters and the first curve from the input lists
+    rp = rps.pop(0)
+    print rp
+    curve = curves.pop(0)
+    
+    # split the curve and add the results to the curves list
+    curves += split_space(curve, rp)
+    
+    # run the split_recursively() function again with the updated curves list and the remaining parameters
+    return split_recursively(curves, rps)
+
+# call the split_recursively() function to split the input boundary into parts
+# this starts the recursion process with all the parameters and a single curve in the input list
+curves = split_recursively([boundary], rps)
+
+```
+
 ## Subdivision tutorial
 
 | Files you will need for this tutorial   |
